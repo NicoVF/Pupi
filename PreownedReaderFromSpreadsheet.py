@@ -7,7 +7,8 @@ class PreownedReaderFromSpreadsheet:
 
     def read_preowned(self):
         preowned_cars = []
-        for row in self._spreadsheet.rows():
+        rows = self._spreadsheet.rows()
+        for row in rows:
             preowned_cars.append(PreownedCar(row[0]))
         return preowned_cars
 

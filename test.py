@@ -1,11 +1,17 @@
 import unittest
+
+from GoogleSpreadsheet import GoogleSpreadsheet
 from PreownedReaderFromSpreadsheet import PreownedReaderFromSpreadsheet
 from Spreadsheet import Spreadsheet
 
 
 class MyTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self._spreadsheet_factory = RemoteSpreadsheets()
+
     def test01_AnEmptySpreadsheetOutputsNoFile(self):
-        spreadsheet = self.new_empty_spreadsheet()
+        spreadsheet = self.empty_spreadsheet()
         reader = PreownedReaderFromSpreadsheet(spreadsheet)
         preowned_cars = reader.read_preowned()
         self.assertTrue(len(preowned_cars) == 0)
@@ -28,7 +34,18 @@ class MyTestCase(unittest.TestCase):
         preowned_car = reader.read_preowned()[0]
         self.assertEqual("Ford", preowned_car.brand())
 
-    def new_empty_spreadsheet(self):
+    def empty_spreadsheet(self):
+        return self._spreadsheet_factory.empty_spreadsheet()
+
+    def example_spreadsheet(self):
+        return self._spreadsheet_factory.example_spreadsheet()
+
+    def example_spreadsheet_with_one_row(self):
+        return self._spreadsheet_factory.example_spreadsheet_with_one_row()
+
+
+class LocalSpreadsheets:
+    def empty_spreadsheet(self):
         return Spreadsheet()
 
     def example_spreadsheet(self):
@@ -42,6 +59,20 @@ class MyTestCase(unittest.TestCase):
         return spreadsheet
 
 
+class RemoteSpreadsheets:
+
+    def empty_spreadsheet(self):
+        return GoogleSpreadsheet()
+
+    def example_spreadsheet(self):
+        spreadsheet = Spreadsheet()
+        spreadsheet.add_row(["Ford"])
+        return spreadsheet
+
+    def example_spreadsheet_with_one_row(self):
+        spreadsheet = Spreadsheet()
+        spreadsheet.add_row(["Fiat"])
+        return spreadsheet
 
 if __name__ == '__main__':
     unittest.main()

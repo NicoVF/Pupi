@@ -1,15 +1,6 @@
 import unittest
-
-
-class Spreadsheet:
-    def __init__(self):
-        self._rows = []
-
-    def rows(self):
-        return self._rows
-
-    def add_row(self, row):
-        self._rows.append(row)
+from PreownedReaderFromSpreadsheet import PreownedReaderFromSpreadsheet
+from Spreadsheet import Spreadsheet
 
 
 class MyTestCase(unittest.TestCase):
@@ -42,12 +33,12 @@ class MyTestCase(unittest.TestCase):
 
     def example_spreadsheet(self):
         spreadsheet = Spreadsheet()
-        spreadsheet.add_row("Ford")
+        spreadsheet.add_row(["Ford"])
         return spreadsheet
 
     def example_spreadsheet_with_one_row(self):
         spreadsheet = Spreadsheet()
-        spreadsheet.add_row("Fiat")
+        spreadsheet.add_row(["Fiat"])
         return spreadsheet
 
 
@@ -56,21 +47,6 @@ if __name__ == '__main__':
     unittest.main()
 
 
-class PreownedCar:
-    def __init__(self, marca):
-        self._marca = marca
-
-    def brand(self):
-        return self._marca
 
 
-class PreownedReaderFromSpreadsheet:
-    def __init__(self, spreadsheet):
-        self._spreadsheet = spreadsheet
-
-    def read_preowned(self):
-        preowned_cars = []
-        for row in self._spreadsheet.rows():
-            preowned_cars.append(PreownedCar(row))
-        return preowned_cars
 

@@ -16,19 +16,19 @@ class MyTestCase(unittest.TestCase):
         preowned_cars = reader.read_preowned()
         self.assertTrue(len(preowned_cars) == 0)
 
-    def test02_xx(self):
+    def test02_ASpreadsheetWithOnlyOneRowOfDataHas1PreOwnedCar(self):
         spreadsheet = self.example_spreadsheet_with_one_row()
         reader = PreownedReaderFromSpreadsheet(spreadsheet)
         preowned_cars = reader.read_preowned()
         self.assertTrue(len(preowned_cars) == 1)
 
-    def test03_xxx(self):
+    def test03_ASpreadsheetRowContainsABrandOfAPreOwnedCar(self):
         spreadsheet = self.example_spreadsheet_with_one_row()
         reader = PreownedReaderFromSpreadsheet(spreadsheet)
         preowned_car = reader.read_preowned()[0]
         self.assertEqual("Fiat", preowned_car.brand())
 
-    def test04_xxxx(self):
+    def test04_ASpreadsheetRowCanContainADifferentBrandOfAPreOwnedCar(self):
         spreadsheet = self.example_spreadsheet()
         reader = PreownedReaderFromSpreadsheet(spreadsheet)
         preowned_car = reader.read_preowned()[0]

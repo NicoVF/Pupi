@@ -62,12 +62,10 @@ class LocalSpreadsheets:
 class RemoteSpreadsheets:
 
     def empty_spreadsheet(self):
-        return GoogleSpreadsheet('1ESmRbSaV0zURrEFNiPBut0mynSZ45GWSXjgTBbMfjAo')
+        return GoogleSpreadsheet('1TeChb98-TPlPGzF9bj3Yi8UP1U3UmOy2JERFawePDx4')
 
     def example_spreadsheet_with_one_row(self):
-        spreadsheet = Spreadsheet()
-        spreadsheet.add_row(["Fiat"])
-        return spreadsheet
+        return GoogleSpreadsheet('1ESmRbSaV0zURrEFNiPBut0mynSZ45GWSXjgTBbMfjAo')
 
     def example_spreadsheet(self):
         spreadsheet = Spreadsheet()

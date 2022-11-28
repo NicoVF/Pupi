@@ -66,12 +66,10 @@ class RemoteSpreadsheets:
 
     def example_spreadsheet_with_one_row(self):
         return GoogleSpreadsheet('1ESmRbSaV0zURrEFNiPBut0mynSZ45GWSXjgTBbMfjAo')
+        return GoogleSpreadsheet('14T5VQ7tni17N8LKYE2YL9l0DlnFApa4XV1QSIyIE41o')
 
     def example_spreadsheet(self):
-        spreadsheet = Spreadsheet()
-        spreadsheet.add_row(["Ford"])
-        return spreadsheet
-
+        return GoogleSpreadsheet('14T5VQ7tni17N8LKYE2YL9l0DlnFApa4XV1QSIyIE41o')
 
 if __name__ == '__main__':
     unittest.main()

@@ -35,7 +35,7 @@ class SpreadsheetReader(object):
     def GetValues(self):
         wanted_headers = ["marca", "modelo", "grupo", "anio"]
         xxx = []
-        values = self.result.get('values', [])
+        values = self.result.get('values', [])[1:]
         for row in values:
             for field in row:
                 if wanted_headers.__contains__(field):

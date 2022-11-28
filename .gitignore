@@ -9,3 +9,9 @@ __pycache__/test.cpython-310.pyc
 __pycache__/PreownedReaderFromSpreadsheet.cpython-310.pyc
 *.pyc
 *.pyc
+.idea/misc.xml
+.idea/Pupi.iml
+__pycache__/PreownedCar.cpython-310.pyc
+__pycache__/PreownedReaderFromSpreadsheet.cpython-310.pyc
+__pycache__/Spreadsheet.cpython-310.pyc
+__pycache__/test.cpython-310.pyc

@@ -11,27 +11,29 @@ from google.oauth2 import service_account
 
 class SpreadsheetReader(object):
 
-    SERVICE_ACCOUNT_FILE = './keys_secrets.json'
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+    def __init__(self, uid):
 
-    credentials = None
-    credentials = service_account.Credentials.from_service_account_file(
-            SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+        service_account_file = './keys_secrets.json'
+        scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
-    # If modifying these scopes, delete the file token.json.
+        credentials = None
+        credentials = service_account.Credentials.from_service_account_file(
+                service_account_file, scopes=scopes)
 
-    # The ID and range of a sample spreadsheet.
-    SAMPLE_SPREADSHEET_ID = '1ESmRbSaV0zURrEFNiPBut0mynSZ45GWSXjgTBbMfjAo'
+        # If modifying these scopes, delete the file token.json.
 
-    service = build('sheets', 'v4', credentials=credentials)
+        # The ID and range of a sample spreadsheet.
+        self.spreadsheet_id = uid
 
-    # Call the Sheets API
-    sheet = service.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID,
+        service = build('sheets', 'v4', credentials=credentials)
+
+        # Call the Sheets API
+        sheet = service.spreadsheets()
+        self.result = sheet.values().get(spreadsheetId=self.spreadsheet_id,
                                 range="Hoja 1!A:Z", majorDimension='ROWS').execute()
 
     def GetValues(self):
-        wanted_headers = ["marca","modelo","grupo","anio"]
+        wanted_headers = ["marca", "modelo", "grupo", "anio"]
         xxx = []
         values = self.result.get('values', [])
         for row in values:

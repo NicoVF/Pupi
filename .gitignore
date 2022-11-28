@@ -7,3 +7,5 @@ __pycache__/PreownedReaderFromSpreadsheet.cpython-310.pyc
 __pycache__/PreownedReaderFromSpreadsheet.cpython-310.pyc
 __pycache__/test.cpython-310.pyc
 __pycache__/PreownedReaderFromSpreadsheet.cpython-310.pyc
+*.pyc
+*.pyc

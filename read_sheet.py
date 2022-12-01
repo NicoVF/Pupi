@@ -31,6 +31,7 @@ class SpreadsheetReader(object):
         sheet = service.spreadsheets()
         self.result = sheet.values().get(spreadsheetId=self.spreadsheet_id,
                                 range="Hoja 1!A:Z", majorDimension='ROWS').execute()
+        service.close()
 
     def GetValues(self):
         wanted_headers = ["marca", "modelo", "grupo", "anio"]

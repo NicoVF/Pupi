@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{title}}</title>
+</head>
+<body>
+<form action="/pupi/catalog/send" method="post">
+    {% csrf_token %}
+    <label for="xml">XML a enviar: </label>
+    <textarea name="xml" id="xml" cols="30" rows="10">{{ xml }}</textarea>
+    <input type="submit" value="OK">
+</form>
+
+<h2>Errores:</h2>
+    {{errors}}
+</body>
+</html>

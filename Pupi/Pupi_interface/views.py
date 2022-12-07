@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 
-from Pupi.Pupi_interface.tests import Pupi, Cliente
+
 
 
 # Create your views here.
@@ -21,13 +21,18 @@ class SendCatalogView(generic.TemplateView):
         client_name = "PROD-RUN"
         sucursal = "SERGI"
         token = "c949c975-5445-4bdc-8616-54a74015dc1c"
-        client = Cliente(client_name, sucursal, token)
-        pupi = Pupi()
-        result = Result()
+        # client = Cliente(client_name, sucursal, token)
+        # pupi = Pupi()
+        # result = Result()
+        # xml_to_send = ""
+        # result = pupi.enviar_xml(client, xml_to_send)
+        # result_errors = result.errors()[0]
+
         xml_to_send = ""
-        result = pupi.enviar_xml(client, xml_to_send)
+        result_errors = "hola"
 
         # construir respuesta
         titulo = 'Enviar Catalogo'
-        context = {"title": titulo, 'errors': result.errors()[0], 'xml': xml_to_send}
+        context = {"title": titulo, 'errors': result_errors, 'xml': xml_to_send}
         return render(request, 'templates/sendCatalog.html', context)
+

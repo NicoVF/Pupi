@@ -13,7 +13,7 @@ class Result:
 
 
 class SimulatedPupi:
-    def enviar_xml(self, client, xml):
+    def send_xml(self, client, xml):
         result = Result()
         if len(xml) == 0:
             result.add_error("Root element is missing.")

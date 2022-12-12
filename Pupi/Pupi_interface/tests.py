@@ -3,24 +3,25 @@ from django.test import TestCase
 import unittest
 
 from Pupi_interface.business import SimulatedPupi, Cliente
+from Pupi_interface.business.remote_pupi import RemotePupi
 
 
 class MyTestCase(unittest.TestCase):
     def setUp(self) -> None:
         super(MyTestCase, self).setUp()
-        self.pupi = SimulatedPupi()
+        self.pupi = RemotePupi()
 
     def test_01_send_a_basic_xml(self):
         client = self.example_client()
         xml_to_send = self.basic_xml()
-        result = self.pupi.enviar_xml(client, xml_to_send)
+        result = self.pupi.send_xml(client, xml_to_send)
         self.assertTrue(result.is_succesfull())
 
     def test_02_an_invalid_xml_answers_a_result_with_error(self):
         client = self.example_client()
         self.pupi = SimulatedPupi()
         xml_to_send = self.empty_xml()
-        result = self.pupi.enviar_xml(client, xml_to_send)
+        result = self.pupi.send_xml(client, xml_to_send)
         self.assertFalse(result.is_succesfull())
         self.assertTrue(len(result.errors()) > 0)
 

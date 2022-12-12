@@ -25,7 +25,7 @@ class SendCatalogView(generic.TemplateView):
         client = Cliente(client_name, sucursal, token)
         pupi = SimulatedPupi()
         result = Result()
-        result = pupi.enviar_xml(client, xml_to_send)
+        result = pupi.send_xml(client, xml_to_send)
         result_errors = str(result.errors())
 
         # construir respuesta

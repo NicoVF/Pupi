@@ -2,48 +2,25 @@ from django.test import TestCase
 
 import unittest
 
-
-class Result:
-    def __init__(self):
-        self._errors = []
-
-    def add_error(self, error):
-        self._errors.append(error)
-
-    def is_succesfull(self):
-        return len(self._errors) == 0
-
-    def errors(self):
-        return self._errors
-
-
-class Pupi:
-    def enviar_xml(self, client, xml):
-        result = Result()
-        if len(xml) == 0:
-            result.add_error("Root element is missing.")
-        return result
-
-
-class Cliente:
-    def __init__(self, cliente, sucursal, token):
-        pass
+from Pupi_interface.business import SimulatedPupi, Cliente
 
 
 class MyTestCase(unittest.TestCase):
+    def setUp(self) -> None:
+        super(MyTestCase, self).setUp()
+        self.pupi = SimulatedPupi()
 
     def test_01_send_a_basic_xml(self):
         client = self.example_client()
-        pupi = Pupi()
         xml_to_send = self.basic_xml()
-        result = pupi.enviar_xml(client, xml_to_send)
+        result = self.pupi.enviar_xml(client, xml_to_send)
         self.assertTrue(result.is_succesfull())
 
-    def test_02_an_empty_xml_has_an_error(self):
+    def test_02_an_invalid_xml_answers_a_result_with_error(self):
         client = self.example_client()
-        pupi = Pupi()
+        self.pupi = SimulatedPupi()
         xml_to_send = self.empty_xml()
-        result = pupi.enviar_xml(client, xml_to_send)
+        result = self.pupi.enviar_xml(client, xml_to_send)
         self.assertFalse(result.is_succesfull())
         self.assertTrue(len(result.errors()) > 0)
 

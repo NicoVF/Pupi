@@ -22,6 +22,18 @@ class SimulatedPupi:
 
 class Cliente:
     def __init__(self, cliente, sucursal, token):
-        pass
+        self._client_name = cliente
+        self._sucursal = sucursal
+        self._token = token
+
+    def client_name(self):
+        return self._client_name
+
+    def sucursal(self):
+        return self._sucursal
+
+    def token(self):
+        return self._token
+
 
 

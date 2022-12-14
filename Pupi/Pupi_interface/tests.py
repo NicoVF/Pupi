@@ -19,7 +19,7 @@ class MyTestCase(unittest.TestCase):
 
     def test_02_an_invalid_xml_answers_a_result_with_error(self):
         client = self.example_client()
-        self.pupi = SimulatedPupi()
+        self.pupi = RemotePupi()
         xml_to_send = self.empty_xml()
         result = self.pupi.send_xml(client, xml_to_send)
         self.assertFalse(result.is_succesfull())
@@ -33,8 +33,7 @@ class MyTestCase(unittest.TestCase):
         return client
 
     def basic_xml(self):
-        return "\
-            <?xml version='1.0' encoding='utf-8'?>\
+        return "<?xml version='1.0' encoding='utf-8'?>\
             <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
                 <marca nombre='Toyota' estado='activo'>\
                     <modelo id='corolla' enLista='activo' display='Corolla' estado='activo'>\

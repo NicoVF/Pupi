@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 
 from Pupi_interface.business import Result, SimulatedPupi, Cliente
+from Pupi_interface.business.remote_pupi import RemotePupi
 
 
 # Create your views here.
@@ -23,7 +24,7 @@ class SendCatalogView(generic.TemplateView):
         sucursal = "SERGI"
         token = "c949c975-5445-4bdc-8616-54a74015dc1c"
         client = Cliente(client_name, sucursal, token)
-        pupi = SimulatedPupi()
+        pupi = RemotePupi()
         result = Result()
         result = pupi.send_xml(client, xml_to_send)
         result_errors = str(result.errors())

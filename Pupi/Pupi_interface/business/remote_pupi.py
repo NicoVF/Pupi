@@ -19,4 +19,5 @@ class RemotePupi:
         result = Result()
         if response.status_code not in range(200, 299):
             result.add_error("la respuesta no fue exitosa")
+        
         return result

@@ -12,7 +12,17 @@ class SendCatalogView(generic.TemplateView):
 
     def get(self, request, *args, **kwargs):
         titulo = 'Enviar Catalogo'
-        context = {"title": titulo, 'errors': "", 'xml': ""}
+        client_name = "PROD-RUN"
+        sucursal = "SERGI"
+        token = "c949c975-5445-4bdc-8616-54a74015dc1c"
+        context = {
+            'title': titulo,
+            'errors': "",
+            'xml': "",
+            'client_name': client_name,
+            'token': token,
+            'sucursal': sucursal
+        }
         return render(request, 'templates/sendCatalog.html', context)
 
     def post(self, request, *args, **kwargs):
@@ -20,9 +30,9 @@ class SendCatalogView(generic.TemplateView):
         xml_to_send = request.POST["xml"]
 
         # ejecuto lo que tengo que ejecutar
-        client_name = "PROD-RUN"
-        sucursal = "SERGI"
-        token = "c949c975-5445-4bdc-8616-54a74015dc1c"
+        client_name = request.POST["client_name"]
+        sucursal = request.POST["sucursal"]
+        token = request.POST["token"]
         client = Cliente(client_name, sucursal, token)
         pupi = RemotePupi()
         result = Result()
@@ -31,6 +41,13 @@ class SendCatalogView(generic.TemplateView):
 
         # construir respuesta
         titulo = 'Enviar Catalogo'
-        context = {"title": titulo, 'errors': result_errors, 'xml': xml_to_send}
+        context = {
+            'title': titulo,
+            'errors': result_errors,
+            'xml': xml_to_send,
+            'client_name': client_name,
+            'token': token,
+            'sucursal': sucursal
+        }
         return render(request, 'templates/sendCatalog.html', context)
 

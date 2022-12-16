@@ -16,7 +16,9 @@ class SimulatedPupi:
     def send_xml(self, client, xml):
         result = Result()
         if len(xml) == 0:
-            result.add_error("Root element is missing.")
+            result.add_error("status code: 400\n" + \
+                             "content: <errors xmlns=\"http://chat.soybot.com/catalogo/V1\"><error>Root element is " \
+                             "missing.</error></errors>")
         return result
 
 
@@ -34,6 +36,3 @@ class Cliente:
 
     def token(self):
         return self._token
-
-
-

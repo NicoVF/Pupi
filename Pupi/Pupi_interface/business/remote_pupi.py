@@ -18,6 +18,8 @@ class RemotePupi:
         response = requests.request("POST", url, headers=headers, data=payload)
         result = Result()
         if response.status_code not in range(200, 299):
-            result.add_error("la respuesta no fue exitosa")
+            error_string = "status code: " + str(response.status_code) + "\n" + \
+                           "content: " + response.text
+            result.add_error(error_string)
         
         return result

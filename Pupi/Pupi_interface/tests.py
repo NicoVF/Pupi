@@ -56,14 +56,52 @@ class PupiSendCatalogTest(unittest.TestCase):
 
 
 class PupiConvertCsvToXmlTest(unittest.TestCase):
+
+    def setUp(self):
+        super(PupiConvertCsvToXmlTest, self).setUp()
+        self.pupi = SimulatedPupi()
+
+
     def test01xxx(self):
-        csv = self.example_csv()
-        pupi = SimulatedPupi()
-        xml = pupi.convert_to_xml(csv)
+        csv = self.minimal_example_csv()
+        xml = self.pupi.convert_to_xml(csv)
         self.assertTrue(len(xml) > 0)
 
-    def example_csv(self):
-        return ""
+    def test02xxx(self):
+        csv = self.minimal_example_csv()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.basic_xml_audi()
+        self.assertEqual(expected_xml, created_xml)
+
+    def test03xxx(self):
+        csv = self.minimal_example_csv_toyota()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.basic_xml_toyota()
+        self.assertEqual(expected_xml, created_xml)
+
+
+
+    def basic_xml_audi(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\
+            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
+                <marca nombre='Audi' estado='activo'>\
+                </marca>\
+            </marcas>\
+        "
+
+    def minimal_example_csv(self):
+        return "Audi"
+
+    def minimal_example_csv_toyota(self):
+        return "Toyota"
+
+    def basic_xml_toyota(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\
+            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
+                <marca nombre='Toyota' estado='activo'>\
+                </marca>\
+            </marcas>\
+        "
 
 
 if __name__ == '__main__':

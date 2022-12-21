@@ -21,6 +21,14 @@ class SimulatedPupi:
                              "missing.</error></errors>")
         return result
 
+    def convert_to_xml(self, csv):
+        return "<?xml version='1.0' encoding='utf-8'?>\
+            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
+                <marca nombre='Audi' estado='activo'>\
+                </marca>\
+            </marcas>\
+        "
+
 
 class Cliente:
     def __init__(self, cliente, sucursal, token):

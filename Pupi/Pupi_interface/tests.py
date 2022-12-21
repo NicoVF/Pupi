@@ -6,9 +6,9 @@ from Pupi_interface.business import SimulatedPupi, Cliente
 from Pupi_interface.business.remote_pupi import RemotePupi
 
 
-class MyTestCase(unittest.TestCase):
+class PupiSendCatalogTest(unittest.TestCase):
     def setUp(self) -> None:
-        super(MyTestCase, self).setUp()
+        super(PupiSendCatalogTest, self).setUp()
         self.pupi = SimulatedPupi()
 
     def test_01_send_a_basic_xml(self):
@@ -52,6 +52,17 @@ class MyTestCase(unittest.TestCase):
         "
 
     def empty_xml(self):
+        return ""
+
+
+class PupiConvertCsvToXmlTest(unittest.TestCase):
+    def test01xxx(self):
+        csv = self.example_csv()
+        pupi = SimulatedPupi()
+        xml = pupi.convert_to_xml(csv)
+        self.assertTrue(len(xml) > 0)
+
+    def example_csv(self):
         return ""
 
 

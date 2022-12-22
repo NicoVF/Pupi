@@ -12,24 +12,6 @@ class Result:
         return self._errors
 
 
-class SimulatedPupi:
-    def send_xml(self, client, xml):
-        result = Result()
-        if len(xml) == 0:
-            result.add_error("status code: 400\n" + \
-                             "content: <errors xmlns=\"http://chat.soybot.com/catalogo/V1\"><error>Root element is " \
-                             "missing.</error></errors>")
-        return result
-
-    def convert_to_xml(self, csv):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Audi' estado='activo'>\
-                </marca>\
-            </marcas>\
-        "
-
-
 class Cliente:
     def __init__(self, cliente, sucursal, token):
         self._client_name = cliente

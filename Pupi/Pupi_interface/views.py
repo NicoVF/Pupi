@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views import generic
 
-from Pupi_interface.business import Result, SimulatedPupi, Cliente
+from Pupi_interface.business import Result, Cliente
+from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
 
 

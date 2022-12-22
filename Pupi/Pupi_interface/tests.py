@@ -2,7 +2,8 @@ from django.test import TestCase
 
 import unittest
 
-from Pupi_interface.business import SimulatedPupi, Cliente
+from Pupi_interface.business import Cliente
+from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
 
 
@@ -79,6 +80,11 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.basic_xml_toyota()
         self.assertEqual(expected_xml, created_xml)
 
+    def test04xxx(self):
+        csv = self.csv_with_one_row_and_two_fields()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.xml_with_one_brand_and_one_model()
+        self.assertEqual(expected_xml, created_xml)
 
 
     def basic_xml_audi(self):
@@ -99,6 +105,19 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\
             <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
                 <marca nombre='Toyota' estado='activo'>\
+                </marca>\
+            </marcas>\
+        "
+
+    def csv_with_one_row_and_two_fields(self):
+        return "Audi,A1"
+
+    def xml_with_one_brand_and_one_model(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\
+            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
+                <marca nombre='Audi' estado='activo'>\
+                    <modelo display='A1' estado='activo'>\
+                    </modelo>\
                 </marca>\
             </marcas>\
         "

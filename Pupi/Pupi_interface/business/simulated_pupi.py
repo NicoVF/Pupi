@@ -11,14 +11,16 @@ class SimulatedPupi:
         return result
 
     def convert_to_xml(self, csv):
-        row = csv
-        marca_elemento = self._convert_row_to_xml(row)
+        rows = csv.splitlines()
+        marca_elements = ""
+        for row in rows:
+            marca_element = self._convert_row_to_xml(row)
+            marca_elements += marca_element
         converted_xml = f"<?xml version='1.0' encoding='utf-8'?>\
             <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-{marca_elemento}\
+{marca_elements}\
             </marcas>\
         "
-
         return converted_xml
 
     def _convert_row_to_xml(self, row):

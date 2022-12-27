@@ -92,7 +92,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_and_model_toyota()
         self.assertEqual(expected_xml, created_xml)
 
-    def _test06xxx(self):
+    def test06xxx(self):
         csv = self.example_csv_two_different_brands()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.example_xml_two_different_brands()

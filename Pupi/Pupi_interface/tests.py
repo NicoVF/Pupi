@@ -92,11 +92,21 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_and_model_toyota()
         self.assertEqual(expected_xml, created_xml)
 
-    def test06xxx(self):
+    def test06_can_convert_a_multiple_csv_line_into_xml(self):
         csv = self.example_csv_two_different_brands()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.example_xml_two_different_brands()
         self.assertEqual(expected_xml, created_xml)
+
+    def test07_can_nest_units_with_the_same_brands(self):
+        csv = self.example_csv_with_two_same_brands()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_brand_audi()
+        self.assertEqual(expected_xml, created_xml)
+
+
+    def example_csv_with_two_same_brands(self):
+        return "Audi\nAudi"
 
     def example_csv_brand_toyota(self):
         return "Toyota"

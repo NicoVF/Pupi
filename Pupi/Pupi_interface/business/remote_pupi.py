@@ -1,9 +1,10 @@
 import requests
 
 from Pupi_interface.business import Result
+from Pupi_interface.business.pupi import Pupi
 
 
-class RemotePupi:
+class RemotePupi(Pupi):
     def send_xml(self, client, xml):
         url = "https://chat.soybot.com/catalogo"
 

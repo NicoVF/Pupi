@@ -104,6 +104,11 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_audi()
         self.assertEqual(expected_xml, created_xml)
 
+    # def test08_xxx_same_brand_and_different_model(self):
+    #     csv = self.example_csv_with_two_same_brand_and_different_model()
+    #     created_xml = self.pupi.convert_to_xml(csv)
+    #     expected_xml = self.example_xml_with_two_same_brand_and_different_model()
+    #     self.assertEqual(expected_xml, created_xml)
 
     def example_csv_with_two_same_brands(self):
         return "Audi\nAudi"
@@ -165,6 +170,21 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
                 <marca nombre='Audi' estado='activo'>\
                 </marca>\
                 <marca nombre='Toyota' estado='activo'>\
+                </marca>\
+            </marcas>\
+        "
+
+    def example_csv_with_two_same_brand_and_different_model(self):
+        return "Audi,A1\nAudi,A3"
+
+    def example_xml_with_two_same_brand_and_different_model(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\
+            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
+                <marca nombre='Audi' estado='activo'>\
+                    <modelo display='A1' estado='activo'>\
+                    </modelo>\
+                    <modelo display='A3' estado='activo'>\
+                    </modelo>\
                 </marca>\
             </marcas>\
         "

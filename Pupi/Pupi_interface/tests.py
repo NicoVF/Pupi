@@ -5,6 +5,7 @@ import unittest
 from Pupi_interface.business import Cliente
 from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
+from Pupi_interface.business.xxx_pupi import XXXPupi
 
 
 class PupiSendCatalogTest(unittest.TestCase):
@@ -60,7 +61,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 
     def setUp(self):
         super(PupiConvertCsvToXmlTest, self).setUp()
-        self.pupi = SimulatedPupi()
+        self.pupi = XXXPupi()
 
 
     def test01xxx(self):

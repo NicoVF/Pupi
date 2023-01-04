@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 
+
 class Pupi:
 
     def send_xml(self):
@@ -23,3 +24,4 @@ class Pupi:
         ET.indent(brands, space='    ')
         xml = ET.tostring(brands, encoding="utf-8", method='xml', xml_declaration=True, ).decode('utf-8')
         return xml
+    

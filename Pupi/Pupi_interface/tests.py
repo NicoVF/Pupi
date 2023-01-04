@@ -3,9 +3,9 @@ from django.test import TestCase
 import unittest
 
 from Pupi_interface.business import Cliente
+from Pupi_interface.business.pupi import Pupi
 from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
-from Pupi_interface.business.xxx_pupi import XXXPupi
 
 
 class PupiSendCatalogTest(unittest.TestCase):
@@ -61,7 +61,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 
     def setUp(self):
         super(PupiConvertCsvToXmlTest, self).setUp()
-        self.pupi = XXXPupi()
+        self.pupi = Pupi()
 
 
     def test01xxx(self):
@@ -127,53 +127,47 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "Toyota,Etios"
 
     def example_xml_brand_audi(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Audi' estado='activo'>\
-                </marca>\
-            </marcas>\
-        "
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\" />\n\
+</marcas>\
+"
 
     def example_xml_brand_toyota(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Toyota' estado='activo'>\
-                </marca>\
-            </marcas>\
-        "
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Toyota\" estado=\"activo\" />\n\
+</marcas>\
+"
 
     def example_xml_brand_and_model_audi(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Audi' estado='activo'>\
-                    <modelo display='A1' estado='activo'>\
-                    </modelo>\
-                </marca>\
-            </marcas>\
-        "
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\" />\n\
+    </marca>\n\
+</marcas>\
+"
 
     def example_xml_brand_and_model_toyota(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Toyota' estado='activo'>\
-                    <modelo display='Etios' estado='activo'>\
-                    </modelo>\
-                </marca>\
-            </marcas>\
-        "
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Toyota\" estado=\"activo\">\n\
+        <modelo display=\"Etios\" estado=\"activo\" />\n\
+    </marca>\n\
+</marcas>\
+"
 
     def example_csv_two_different_brands(self):
         return "Audi\nToyota"
 
     def example_xml_two_different_brands(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\
-            <marcas xmlns='http://chat.soybot.com/catalogo/V1'>\
-                <marca nombre='Audi' estado='activo'>\
-                </marca>\
-                <marca nombre='Toyota' estado='activo'>\
-                </marca>\
-            </marcas>\
-        "
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\" />\n\
+    <marca nombre=\"Toyota\" estado=\"activo\" />\n\
+</marcas>\
+"
 
     def example_csv_with_two_same_brand_and_different_model(self):
         return "Audi,A1\nAudi,A3"

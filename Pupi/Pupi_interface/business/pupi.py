@@ -13,6 +13,7 @@ class Pupi:
         previous_version_name = None
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         for row in rows:
+            last_valid_parent_for_unit_element = None
             fields = row.split(',')
             
             brand_name = fields[0]
@@ -26,24 +27,30 @@ class Pupi:
             if model_node_must_be_inserted:
                 model = ET.SubElement(brand, "modelo", display=model_name, estado='activo')
                 previous_model_name = model_name
+                last_valid_parent_for_unit_element = model
                 
-            version_name = fields[2] if len(fields) > 2 else None
+            version_name = fields[2] if len(fields) > 2 and fields[2] != "" else None
             version_node_must_be_inserted = version_name is not None and version_name != previous_version_name
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=version_name, estado='activo')
                 previous_version_name = version_name
+                last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._unit_data_exists(fields)
             if unit_node_must_be_inserted:
-                self._create_unit_element(version, fields)
+                self._create_unit_element(last_valid_parent_for_unit_element, fields)
 
         ET.indent(brands, space='    ')
         xml = ET.tostring(brands, encoding="utf-8", method='xml', xml_declaration=True, ).decode('utf-8')
         return xml
 
     def _unit_data_exists(self, fields):
-        return len(fields) > 6
+        if len(fields) > 6:
+            _id = fields[6]
+            return _id != ""
+        else:
+            return False
 
     def _create_unit_element(self, version, fields):
-        ET.SubElement(version, "unidad", id=fields[6], anio=fields[3])
+        ET.SubElement(version, "unidad", id=fields[6])
     

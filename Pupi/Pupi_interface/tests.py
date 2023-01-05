@@ -141,6 +141,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_version_and_unit_without_id_and_year()
         self.assertEqual(expected_xml, created_xml)
 
+    def test14_xxx_brand_model_with_unit(self):
+        csv = self.example_csv_with_brand_model_with_unit()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_brand_model_with_unit()
+        self.assertEqual(expected_xml, created_xml)
+
     def example_csv_with_two_same_brands(self):
         return "Audi\nAudi"
 
@@ -267,7 +273,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_brand_model_version_and_unit(self):
-        return "Audi,A1,sportback,2012,,,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
+        return "Audi,A1,sportback,,,,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
 
     def example_xml_brand_model_version_and_unit(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
@@ -275,7 +281,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\">\n\
             <version display=\"sportback\" estado=\"activo\">\n\
-                <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" anio=\"2012\" />\n\
+                <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
             </version>\n\
         </modelo>\n\
     </marca>\n\
@@ -295,6 +301,21 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
     </marca>\n\
 </marcas>\
 "
+
+    def example_csv_with_brand_model_with_unit(self):
+        return "Audi,A1,,,,,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
+
+    def example_xml_brand_model_with_unit(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
 
 if __name__ == '__main__':
     unittest.main()

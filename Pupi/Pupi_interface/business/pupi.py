@@ -22,8 +22,8 @@ class Pupi:
                 brand = ET.SubElement(brands, "marca", nombre=brand_name, estado='activo')
                 previous_brand_name = brand_name
                 
-            model_name = fields[1] if len(fields) > 1 else None
-            model_node_must_be_inserted = model_name is not None and model_name != previous_model_name
+            model_name = fields[1] if len(fields) > 1 else ""
+            model_node_must_be_inserted = brand_node_must_be_inserted or model_name != previous_model_name
             if model_node_must_be_inserted:
                 model = ET.SubElement(brand, "modelo", display=model_name, estado='activo')
                 previous_model_name = model_name
@@ -36,7 +36,7 @@ class Pupi:
                 previous_version_name = version_name
                 last_valid_parent_for_unit_element = version
 
-            unit_node_must_be_inserted = self._unit_data_exists(fields)
+            unit_node_must_be_inserted = self._must_insert_unit_element(fields)
             if unit_node_must_be_inserted:
                 self._create_unit_element(last_valid_parent_for_unit_element, fields)
 
@@ -45,12 +45,15 @@ class Pupi:
         return xml
 
     def _unit_data_exists(self, fields):
-        if len(fields) > 6:
-            _id = fields[6]
-            return _id != ""
-        else:
-            return False
+        return len(fields) > 0
 
-    def _create_unit_element(self, version, fields):
-        ET.SubElement(version, "unidad", id=fields[6])
+    def _create_unit_element(self, parent_node, fields):
+        if len(fields) > 6:
+            ET.SubElement(parent_node, "unidad", id=fields[6])
+        else:
+            ET.SubElement(parent_node, "unidad")
+
+    def _must_insert_unit_element(self, fields):
+        cuando_no_existe_una_unidad_falopa = tuki
+        return cuando_no_existe_una_unidad_falopa and self._unit_data_exists()
     

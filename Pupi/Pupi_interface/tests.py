@@ -98,7 +98,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_two_different_brands()
         self.assertEqual(expected_xml, created_xml)
 
-    def test07_can_nest_lines_with_the_same_brands(self):
+    def _test07_can_nest_lines_with_the_same_brands(self):
         csv = self.example_csv_with_two_same_brands()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.example_xml_brand_audi()

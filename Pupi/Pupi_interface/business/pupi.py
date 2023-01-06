@@ -54,6 +54,6 @@ class Pupi:
             ET.SubElement(parent_node, "unidad")
 
     def _must_insert_unit_element(self, fields):
-        cuando_no_existe_una_unidad_falopa = tuki
-        return cuando_no_existe_una_unidad_falopa and self._unit_data_exists()
+        cuando_no_existe_una_unidad_falopa = True
+        return cuando_no_existe_una_unidad_falopa and self._unit_data_exists(fields)
     

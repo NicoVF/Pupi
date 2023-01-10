@@ -8,6 +8,9 @@ class UnitForSale:
         self._version = version
         self._id = id
 
+    def __eq__(self, other):
+        return self._brand == other.brand()
+
     def brand(self):
         return self._brand
 
@@ -58,7 +61,7 @@ class Pupi:
                 version = ET.SubElement(model, "version", display=unit_for_sale.version(), estado='activo')
                 last_valid_parent_for_unit_element = version
 
-            unit_node_must_be_inserted = self._must_insert_unit_element(unit_for_sale)
+            unit_node_must_be_inserted = self._must_insert_unit_element(unit_for_sale, previous_unit_for_sale)
             if unit_node_must_be_inserted:
                 self._create_unit_element(last_valid_parent_for_unit_element, unit_for_sale)
 
@@ -115,8 +118,10 @@ class Pupi:
         else:
             ET.SubElement(parent_node, "unidad")
 
-    def _must_insert_unit_element(self, unit_for_sale):
-        cuando_no_existe_una_unidad_falopa = True
-        return cuando_no_existe_una_unidad_falopa and self._unit_data_exists(unit_for_sale)
+    def _must_insert_unit_element(self, unit_for_sale, previous_unit_for_sale):
+        if previous_unit_for_sale != unit_for_sale:
+            return self._unit_data_exists(unit_for_sale)
+        else:
+            return False
 
 

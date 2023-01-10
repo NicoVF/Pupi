@@ -9,7 +9,7 @@ class UnitForSale:
         self._id = id
 
     def __eq__(self, other):
-        return self._brand == other.brand() and self._model == other.model()
+        return self._brand == other.brand() and self._model == other.model() and self._version == other.version()
 
     def brand(self):
         return self._brand

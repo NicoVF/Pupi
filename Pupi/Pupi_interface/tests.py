@@ -104,13 +104,13 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_audi()
         self.assertEqual(expected_xml, created_xml)
 
-    def _test08_xxx_same_brand_and_different_model(self):
+    def test08_xxx_same_brand_and_different_model(self):
         csv = self.example_csv_with_two_same_brand_and_different_model()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.example_xml_with_two_same_brand_and_different_model()
         self.assertEqual(expected_xml, created_xml)
 
-    def _test09_xxx_brand_and_model_with_version(self):
+    def test09_xxx_brand_and_model_with_version(self):
         csv = self.example_csv_with_same_brand_and_model_with_version()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.example_xml_brand_model_and_version_audi()
@@ -210,7 +210,9 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\">\n\
-            <version display=\"sportback\" estado=\"activo\" />\n\
+            <version display=\"sportback\" estado=\"activo\">\n\
+                <unidad />\n\
+            </version>\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -288,8 +290,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" />\n\
-        <modelo display=\"A3\" estado=\"activo\" />\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad />\n\
+        </modelo>\n\
+        <modelo display=\"A3\" estado=\"activo\">\n\
+            <unidad />\n\
+        </modelo>\n\
     </marca>\n\
 </marcas>\
 "

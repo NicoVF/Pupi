@@ -140,6 +140,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_id()
         self.assertEqual(expected_xml, created_xml)
 
+    def test14_xxx_unit_with_image(self):
+        csv = self.example_csv_with_unit_with_image()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_unit_with_image()
+        self.assertEqual(expected_xml, created_xml)
+
     def example_csv_brand_audi(self):
         return "Audi"
 
@@ -343,6 +349,24 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
     </marca>\n\
 </marcas>\
 "
+
+    def example_xml_unit_with_image(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\">\n\
+                <imagenes>\n\
+                    <url tipo=\"foto-agencia\">https://soybot.s3.amazonaws.com/media/paises/argentina/imagenes-whatapp/marcas/Ford/Focus/Focus.mp4</url>\n\
+                </imagenes>\n\
+            </unidad>\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def example_csv_with_unit_with_image(self):
+        return "Audi,A1,,,,https://soybot.s3.amazonaws.com/media/paises/argentina/imagenes-whatapp/marcas/Ford/Focus/Focus.mp4,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
 
 
 if __name__ == '__main__':

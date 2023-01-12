@@ -158,6 +158,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_price()
         self.assertEqual(expected_xml, created_xml)
 
+    def test19_xxx_brand_model_with_unit_zone(self):
+        csv = self.example_csv_with_brand_model_with_unit_zone()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_brand_model_with_unit_zone()
+        self.assertEqual(expected_xml, created_xml)
+
     def example_csv_brand_audi(self):
         return "Audi"
 
@@ -404,6 +410,20 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\">\n\
             <unidad precio=\"1500000\" />\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def example_csv_with_brand_model_with_unit_zone(self):
+        return "Audi,A1,,,,,,,\"ACASSUSO,Av Libertador,14745\""
+
+    def example_xml_brand_model_with_unit_zone(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad zona=\"ACASSUSO,Av Libertador,14745\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\

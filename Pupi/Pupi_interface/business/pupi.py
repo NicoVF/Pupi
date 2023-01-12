@@ -1,8 +1,9 @@
+import csv
 import xml.etree.ElementTree as ET
 
 
 class UnitForSale:
-    def __init__(self, brand, model, version, year, price, image, id):
+    def __init__(self, brand, model, version, year, price, image, id, zone):
         self._brand = brand
         self._model = model
         self._version = version
@@ -10,6 +11,7 @@ class UnitForSale:
         self._price = price
         self._image = image
         self._id = id
+        self._zone = zone
 
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version()
@@ -34,6 +36,12 @@ class UnitForSale:
 
     def has_year(self):
         return self._year != ""
+
+    def zone(self):
+        return self._zone
+
+    def has_zone(self):
+        return self._zone != ""
     
     def price(self):
         return self._price
@@ -52,7 +60,7 @@ class UnitForSale:
 
     @classmethod
     def no_unit_for_sale(cls):
-        return cls(brand=None, model="", version=None, year="", price="", image="", id="")
+        return cls(brand=None, model="", version=None, year="", price="", image="", id="", zone="")
 
     @classmethod
     def create_unit_from(cls, fields):
@@ -62,7 +70,9 @@ class UnitForSale:
                    year=fields[3] if len(fields) > 3 else "",
                    price=fields[4] if len(fields) > 4 else "",
                    image=fields[5] if len(fields) > 5 else "",
-                   id=fields[6] if len(fields) > 6 else "")
+                   id=fields[6] if len(fields) > 6 else "",
+                   zone=fields[8] if len(fields) > 8 else "",
+                   )
 
 
 class Pupi:
@@ -70,12 +80,11 @@ class Pupi:
     def send_xml(self):
         raise NotImplementedError('Subclass responsibility')
 
-    def convert_to_xml(self, csv):
-        rows = csv.splitlines()
+    def convert_to_xml(self, a_csv):
+        rows = csv.reader(a_csv.splitlines())
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
-        for row in rows:
-            fields = row.split(',')
+        for fields in rows:
 
             current_unit_for_sale = UnitForSale.create_unit_from(fields)
 
@@ -114,6 +123,8 @@ class Pupi:
             unit_attr["anio"] = unit_for_sale.year()
         if unit_for_sale.has_price():
             unit_attr["precio"] = unit_for_sale.price()
+        if unit_for_sale.has_zone():
+            unit_attr["zona"] = unit_for_sale.zone()
         unit = ET.SubElement(parent_node, "unidad", **unit_attr)
         return unit
 

@@ -2,10 +2,11 @@ import xml.etree.ElementTree as ET
 
 
 class UnitForSale:
-    def __init__(self, brand, model, version, image, id):
+    def __init__(self, brand, model, version, year, image, id):
         self._brand = brand
         self._model = model
         self._version = version
+        self._year = year
         self._image = image
         self._id = id
 
@@ -25,7 +26,13 @@ class UnitForSale:
         return self._id
 
     def has_id(self):
-        return self._id
+        return self._id != ""
+
+    def year(self):
+        return self._year
+
+    def has_year(self):
+        return self._year != ""
 
     def has_valid_brand(self):
         return self._brand is not None
@@ -38,15 +45,16 @@ class UnitForSale:
 
     @classmethod
     def no_unit_for_sale(cls):
-        return cls(brand=None, model="", version=None, image="", id=None)
+        return cls(brand=None, model="", version=None, year="", image="", id="")
 
     @classmethod
     def create_unit_from(cls, fields):
         return cls(brand=fields[0],
                    model=fields[1] if len(fields) > 1 else "",
                    version=fields[2] if len(fields) > 2 and fields[2] != "" else None,
+                   year=fields[3] if len(fields) > 3 else "",
                    image=fields[5] if len(fields) > 5 else "",
-                   id=fields[6] if len(fields) > 6 else None)
+                   id=fields[6] if len(fields) > 6 else "")
 
 
 class Pupi:
@@ -90,11 +98,18 @@ class Pupi:
     def _unit_data_exists(self, unit_for_sale):
         return unit_for_sale.has_valid_brand()
 
-    def _create_unit_element(self, parent_node, unit_for_sale):
+    def _create_unit_xml_element(self, parent_node, unit_for_sale):
+        unit_attr = {}
         if unit_for_sale.has_id():
-            unit = ET.SubElement(parent_node, "unidad", id=unit_for_sale.id())
-        else:
-            unit = ET.SubElement(parent_node, "unidad")
+            unit_attr["id"] = unit_for_sale.id()
+        if unit_for_sale.has_year():
+            unit_attr["anio"] = unit_for_sale.year()
+        unit = ET.SubElement(parent_node, "unidad", **unit_attr)
+        return unit
+
+    def _create_unit_element(self, parent_node, unit_for_sale):
+        parameters = {"parent_node": parent_node, "unit_for_sale": unit_for_sale}
+        unit = self._create_unit_xml_element(**parameters)
         image_node_must_be_inserted = unit_for_sale.has_image()
         if image_node_must_be_inserted:
             image = ET.SubElement(unit, "imagenes")

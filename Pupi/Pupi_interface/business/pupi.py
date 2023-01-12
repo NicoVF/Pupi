@@ -2,11 +2,12 @@ import xml.etree.ElementTree as ET
 
 
 class UnitForSale:
-    def __init__(self, brand, model, version, year, image, id):
+    def __init__(self, brand, model, version, year, price, image, id):
         self._brand = brand
         self._model = model
         self._version = version
         self._year = year
+        self._price = price
         self._image = image
         self._id = id
 
@@ -33,6 +34,12 @@ class UnitForSale:
 
     def has_year(self):
         return self._year != ""
+    
+    def price(self):
+        return self._price
+
+    def has_price(self):
+        return self._price != ""
 
     def has_valid_brand(self):
         return self._brand is not None
@@ -45,7 +52,7 @@ class UnitForSale:
 
     @classmethod
     def no_unit_for_sale(cls):
-        return cls(brand=None, model="", version=None, year="", image="", id="")
+        return cls(brand=None, model="", version=None, year="", price="", image="", id="")
 
     @classmethod
     def create_unit_from(cls, fields):
@@ -53,6 +60,7 @@ class UnitForSale:
                    model=fields[1] if len(fields) > 1 else "",
                    version=fields[2] if len(fields) > 2 and fields[2] != "" else None,
                    year=fields[3] if len(fields) > 3 else "",
+                   price=fields[4] if len(fields) > 4 else "",
                    image=fields[5] if len(fields) > 5 else "",
                    id=fields[6] if len(fields) > 6 else "")
 
@@ -104,6 +112,8 @@ class Pupi:
             unit_attr["id"] = unit_for_sale.id()
         if unit_for_sale.has_year():
             unit_attr["anio"] = unit_for_sale.year()
+        if unit_for_sale.has_price():
+            unit_attr["precio"] = unit_for_sale.price()
         unit = ET.SubElement(parent_node, "unidad", **unit_attr)
         return unit
 

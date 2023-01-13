@@ -17,8 +17,9 @@ class UnitForSale:
     NO_LONGITUD = ""
     NO_PROVIDER = ""
     NO_PROVIDER_OF_PROVIDERS = ""
+    NO_SALES_TYPE = ""
 
-    def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud, provider, provider_of_providers):
+    def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud, provider, provider_of_providers, sales_type):
         self._brand = brand
         self._model = model
         self._version = version
@@ -33,7 +34,7 @@ class UnitForSale:
         self._longitud = longitud
         self._provider = provider
         self._provider_of_providers = provider_of_providers
-
+        self._sales_type = sales_type
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version()
 
@@ -99,6 +100,12 @@ class UnitForSale:
 
     def has_provider_of_providers(self):
         return self._provider_of_providers != self.NO_PROVIDER_OF_PROVIDERS
+
+    def sales_type(self):
+        return self._sales_type
+
+    def has_sales_type(self):
+        return self._sales_type != self.NO_SALES_TYPE
     
     def price(self):
         return self._price
@@ -117,7 +124,10 @@ class UnitForSale:
 
     @classmethod
     def no_unit_for_sale(cls):
-        return cls(brand=cls.NO_BRAND, model=cls.NO_MODEL, version=cls.NO_VERSION, year=cls.NO_YEAR, price=cls.NO_PRICE, image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, currency=cls.NO_CURRENCY, zone=cls.NO_ZONE, latitud=cls.NO_LATITUD, longitud=cls.NO_LONGITUD, provider=cls.NO_PROVIDER, provider_of_providers=cls.NO_PROVIDER_OF_PROVIDERS)
+        return cls(brand=cls.NO_BRAND, model=cls.NO_MODEL, version=cls.NO_VERSION, year=cls.NO_YEAR, price=cls.NO_PRICE,
+                   image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, currency=cls.NO_CURRENCY,
+                   zone=cls.NO_ZONE, latitud=cls.NO_LATITUD, longitud=cls.NO_LONGITUD, provider=cls.NO_PROVIDER,
+                   provider_of_providers=cls.NO_PROVIDER_OF_PROVIDERS, sales_type=cls.NO_SALES_TYPE)
 
     @classmethod
     def create_unit_from(cls, fields):
@@ -135,6 +145,7 @@ class UnitForSale:
                    longitud=fields[11] if len(fields) > 11 else cls.NO_LONGITUD,
                    provider=fields[12] if len(fields) > 12 else cls.NO_PROVIDER,
                    provider_of_providers=fields[13] if len(fields) > 13 else cls.NO_PROVIDER_OF_PROVIDERS,
+                   sales_type=fields[14] if len(fields) > 14 else cls.NO_SALES_TYPE,
                    )
 
 
@@ -200,6 +211,8 @@ class Pupi:
             unit_attr["cliente"] = unit_for_sale.provider()
         if unit_for_sale.has_provider_of_providers():
             unit_attr["proveedorProveedores"] = unit_for_sale.provider_of_providers()
+        if unit_for_sale.has_sales_type():
+            unit_attr["tipoVenta"] = unit_for_sale.sales_type()
         unit = ET.SubElement(parent_node, "unidad", **unit_attr)
         return unit
 

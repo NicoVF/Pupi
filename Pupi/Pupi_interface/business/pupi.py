@@ -11,9 +11,12 @@ class UnitForSale:
     NO_IMAGE = ""
     NO_ID = ""
     NO_KILOMETERS = ""
+    NO_CURRENCY = ""
     NO_ZONE = ""
+    NO_LATITUD = ""
+    NO_LONGITUD = ""
 
-    def __init__(self, brand, model, version, year, price, image, id, kilometers, zone):
+    def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud):
         self._brand = brand
         self._model = model
         self._version = version
@@ -22,7 +25,10 @@ class UnitForSale:
         self._image = image
         self._id = id
         self._kilometers = kilometers
+        self._currency = currency
         self._zone = zone
+        self._latitud = latitud
+        self._longitud = longitud
 
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version()
@@ -54,11 +60,29 @@ class UnitForSale:
     def has_kilometers(self):
         return self._kilometers != self.NO_KILOMETERS
 
+    def currency(self):
+        return self._currency
+
+    def has_currency(self):
+        return self._currency != self.NO_CURRENCY
+    
     def zone(self):
         return self._zone
 
     def has_zone(self):
         return self._zone != self.NO_ZONE
+
+    def latitud(self):
+        return self._latitud
+
+    def has_latitud(self):
+        return self._latitud != self.NO_LATITUD
+
+    def longitud(self):
+        return self._longitud
+
+    def has_longitud(self):
+        return self._longitud != self.NO_LONGITUD
     
     def price(self):
         return self._price
@@ -77,7 +101,7 @@ class UnitForSale:
 
     @classmethod
     def no_unit_for_sale(cls):
-        return cls(brand=cls.NO_BRAND, model=cls.NO_MODEL, version=cls.NO_VERSION, year=cls.NO_YEAR, price=cls.NO_PRICE, image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, zone=cls.NO_ZONE)
+        return cls(brand=cls.NO_BRAND, model=cls.NO_MODEL, version=cls.NO_VERSION, year=cls.NO_YEAR, price=cls.NO_PRICE, image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, currency=cls.NO_CURRENCY, zone=cls.NO_ZONE, latitud=cls.NO_LATITUD, longitud=cls.NO_LONGITUD)
 
     @classmethod
     def create_unit_from(cls, fields):
@@ -89,7 +113,10 @@ class UnitForSale:
                    image=fields[5] if len(fields) > 5 else cls.NO_IMAGE,
                    id=fields[6] if len(fields) > 6 else cls.NO_ID,
                    kilometers=fields[7] if len(fields) > 7 else cls.NO_KILOMETERS,
-                   zone=fields[8] if len(fields) > 8 else cls.NO_ZONE,
+                   currency=fields[8] if len(fields) > 8 else cls.NO_CURRENCY,
+                   zone=fields[9] if len(fields) > 9 else cls.NO_ZONE,
+                   latitud=fields[10] if len(fields) > 10 else cls.NO_LATITUD,
+                   longitud=fields[11] if len(fields) > 11 else cls.NO_LONGITUD,
                    )
 
 
@@ -143,8 +170,14 @@ class Pupi:
             unit_attr["anio"] = unit_for_sale.year()
         if unit_for_sale.has_price():
             unit_attr["precio"] = unit_for_sale.price()
+        if unit_for_sale.has_currency():
+            unit_attr["tipoCambio"] = unit_for_sale.currency()
         if unit_for_sale.has_zone():
             unit_attr["zona"] = unit_for_sale.zone()
+        if unit_for_sale.has_latitud():
+            unit_attr["lat"] = unit_for_sale.latitud()
+        if unit_for_sale.has_longitud():
+            unit_attr["long"] = unit_for_sale.longitud()
         unit = ET.SubElement(parent_node, "unidad", **unit_attr)
         return unit
 

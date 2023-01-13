@@ -188,6 +188,18 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_longitud()
         self.assertEqual(expected_xml, created_xml)
 
+    def test22_xxx_brand_model_with_unit_provider(self):
+        csv = self.example_csv_with_brand_model_with_unit_provider()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_brand_model_with_unit_provider()
+        self.assertEqual(expected_xml, created_xml)
+
+    def test23_xxx_brand_model_with_unit_provider_of_providers(self):
+        csv = self.example_csv_with_brand_model_with_unit_provider_of_providers()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_brand_model_with_unit_provider_of_providers()
+        self.assertEqual(expected_xml, created_xml)
+
     def example_csv_brand_audi(self):
         return "Audi"
 
@@ -503,6 +515,34 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\">\n\
             <unidad kilometros=\"58000\" />\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def example_csv_with_brand_model_with_unit_provider(self):
+        return "Audi,A1,,,,,,,,,,,Munafo Virtual"
+
+    def example_xml_brand_model_with_unit_provider(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad cliente=\"Munafo Virtual\" />\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def example_csv_with_brand_model_with_unit_provider_of_providers(self):
+        return "Audi,A1,,,,,,,,,,,,DeConcesionarias"
+
+    def example_xml_brand_model_with_unit_provider_of_providers(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\">\n\
+            <unidad proveedorProveedores=\"DeConcesionarias\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\

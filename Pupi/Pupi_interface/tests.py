@@ -207,7 +207,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         self.assertEqual(expected_xml, created_xml)
 
     def example_csv_brand_audi(self):
-        return "Audi"
+        return "audi"
 
     def example_csv_with_two_same_brands(self):
         return "Audi\nAudi"
@@ -238,7 +238,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_brand_and_model_audi(self):
-        return "Audi,A1"
+        return "aUdi,a1"
 
     def example_xml_brand_and_model_audi(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\

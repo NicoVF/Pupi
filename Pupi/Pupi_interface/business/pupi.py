@@ -164,12 +164,13 @@ class Pupi:
 
             brand_node_must_be_inserted = current_unit_for_sale.brand() != previous_unit_for_sale.brand()
             if brand_node_must_be_inserted:
-                brand = ET.SubElement(brands, "marca", nombre=current_unit_for_sale.brand(), estado='activo')
+                brand = ET.SubElement(brands, "marca", nombre=self._formatted_brand(current_unit_for_sale), estado='activo')
 
             model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() != previous_unit_for_sale.model()
             if model_node_must_be_inserted:
-                model = ET.SubElement(brand, "modelo", display=current_unit_for_sale.model(), estado='activo',
-                                      enlista='activo', id=current_unit_for_sale.model().lower())
+                model = ET.SubElement(brand, "modelo", display=self._formatted_model(current_unit_for_sale),
+                                      estado='activo', enlista='activo', id=self._formatted_model_id(
+                        current_unit_for_sale))
                 # todo definir de quien es la responsabilidad del manejo de id de modelo
                 #  (es la clase o es la linea de arriba quien tiene que manejar el lower y upper case)
                 last_valid_parent_for_unit_element = model
@@ -177,8 +178,10 @@ class Pupi:
             version_node_must_be_inserted = current_unit_for_sale.version() is not None and\
                                             current_unit_for_sale.version() != previous_unit_for_sale.version()
             if version_node_must_be_inserted:
-                version = ET.SubElement(model, "version", display=current_unit_for_sale.version(), estado='activo',
-                                        enlista='activo')
+                version = ET.SubElement(model, "version", display=self._formatted_version_display(
+                    current_unit_for_sale),
+                                        estado='activo', enlista='activo', id=self._formatted_version_id(
+                        current_unit_for_sale))
                 last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)
@@ -189,6 +192,21 @@ class Pupi:
         ET.indent(brands, space='    ')
         xml = ET.tostring(brands, encoding="utf-8", method='xml', xml_declaration=True, ).decode('utf-8')
         return xml
+
+    def _formatted_version_display(self, current_unit_for_sale):
+        return current_unit_for_sale.version().capitalize()
+
+    def _formatted_version_id(self, current_unit_for_sale):
+        return current_unit_for_sale.version().lower()
+
+    def _formatted_brand(self, current_unit_for_sale):
+        return current_unit_for_sale.brand()
+
+    def _formatted_model_id(self, current_unit_for_sale):
+        return current_unit_for_sale.model().lower()
+
+    def _formatted_model(self, current_unit_for_sale):
+        return current_unit_for_sale.model().capitalize()
 
     def _unit_data_exists(self, unit_for_sale):
         return unit_for_sale.has_valid_brand()
@@ -234,5 +252,17 @@ class Pupi:
             return self._unit_data_exists(unit_for_sale)
         else:
             return False
+
+    def _practica(self):
+        row = ""
+        unit_for_sale = self.row_to_unit(row)
+        xml_element = self.unit_to_xml(unit_for_sale)
+        formatted_xml_element = self.format_xml(xml_element)
+    def _practica(self):
+        row = ""
+        unit_for_sale = self.row_to_unit(row)
+        formatted_unit = self.format_unit(unit_for_sale)
+        xml_element = self.unit_to_xml(formatted_unit)
+
 
 

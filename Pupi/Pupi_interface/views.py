@@ -52,3 +52,31 @@ class SendCatalogView(generic.TemplateView):
         }
         return render(request, 'templates/sendCatalog.html', context)
 
+
+class ConvertCSVView(generic.TemplateView):
+    template_name = 'templates/convertCSVtoXML.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        # obtengo parametros
+        csv_to_convert = request.POST["csv"]
+
+        # ejecuto lo que tengo que ejecutar
+        pupi = RemotePupi()
+        xml = pupi.convert_to_xml(csv_to_convert)
+
+        # construir respuesta
+        titulo = 'Enviar Catalogo'
+        context = {
+            'title': titulo,
+            'errors': [],
+            'xml': xml,
+            'client_name': "",
+            'token': "",
+            'sucursal': ""
+        }
+        return render(request, 'templates/sendCatalog.html', context)

@@ -346,16 +346,6 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" />\n\
-        <modelo display=\"A3\" estado=\"activo\" enlista=\"activo\" />\n\
-    </marca>\n\
-</marcas>\
-"
-
-    def example_xml_with_two_same_brand_and_different_model(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\n\
-<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
-    <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
             <unidad />\n\
         </modelo>\n\
@@ -573,3 +563,27 @@ if __name__ == '__main__':
     unittest.main()
 
 
+class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
+
+    def setUp(self):
+        super(PupiNormalizationWhenConvertingCsvToXmlTest, self).setUp()
+        self.pupi = Pupi()
+
+    def test01_ignore_case_in_brand_name(self):
+        csv = self.example_csv_with_two_brands_with_different_case()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_only_one_brand()
+        self.assertEqual(expected_xml, created_xml)
+
+    def example_csv_with_two_brands_with_different_case(self):
+        return "AUDI\naudi"
+    def example_xml_only_one_brand(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
+            <unidad />\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"

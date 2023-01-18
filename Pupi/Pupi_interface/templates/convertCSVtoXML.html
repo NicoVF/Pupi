@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convert CSV</title>
+</head>
+<body>
+<form action="/pupi/catalog/convert" method="post">
+    {% csrf_token %}
+    <label for="csv">CSV a convertir: </label>
+    <textarea name="csv" id="csv" cols="30" rows="10">{{ csv }}</textarea>
+    <input type="submit" value="Convert">
+</form>
+</body>
+</html>

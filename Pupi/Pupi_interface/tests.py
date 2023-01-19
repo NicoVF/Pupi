@@ -482,7 +482,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <unidad lat=\"-34,5951836\" />\n\
+            <unidad lat=\"-34.5951836\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -496,7 +496,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <unidad long=\"-58,3745734\" />\n\
+            <unidad long=\"-58.3745734\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -581,6 +581,12 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_two_model_with_different_case()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test03_ignore_case_in_model_name(self):
+        csv = self.example_csv_with_model_with_lat_and_long()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_model_with_lat_and_long()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -592,5 +598,11 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def example_normalized_csv_with_two_model_with_different_case(self):
         return """"Toyota","Corolla"\n"Toyota","Corolla\""""
+
+    def example_csv_with_model_with_lat_and_long(self):
+        return "Audi,A1,,,,,,,,,\"-34,3745734\",\"-58,3745734\""
+
+    def example_normalized_csv_with_model_with_lat_and_long(self):
+        return """"Audi","A1","","","","","","","","","-34.3745734","-58.3745734\""""
 
 

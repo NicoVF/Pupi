@@ -197,6 +197,10 @@ class Pupi:
             normalized_fields[0] = normalized_fields[0].capitalize()
             if len(fields) > 1:
                 normalized_fields[1] = normalized_fields[1].capitalize()
+            if len(fields) > 10:
+                normalized_fields[10] = normalized_fields[10].replace(',', '.')
+            if len(fields) > 11:
+                normalized_fields[11] = normalized_fields[11].replace(',', '.')
             quoted_fields = ("\"" + field + "\"" for field in normalized_fields)
             normalized_row = ",".join(quoted_fields)
             normalized_rows.append(normalized_row)

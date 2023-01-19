@@ -35,8 +35,9 @@ class UnitForSale:
         self._provider = provider
         self._provider_of_providers = provider_of_providers
         self._sales_type = sales_type
+
     def __eq__(self, other):
-        return self._brand == other.brand() and self._model == other.model() and self._version == other.version()
+        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self._id == other.id() and self._kilometers == other.kilometers()
 
     def brand(self):
         return self._brand

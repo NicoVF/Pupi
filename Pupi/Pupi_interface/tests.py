@@ -571,19 +571,26 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def test01_ignore_case_in_brand_name(self):
         csv = self.example_csv_with_two_brands_with_different_case()
-        created_xml = self.pupi.convert_to_xml(csv)
-        expected_xml = self.example_xml_only_one_brand()
-        self.assertEqual(expected_xml, created_xml)
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_two_brands_with_different_case()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test02_ignore_case_in_model_name(self):
+        csv = self.example_csv_with_two_model_with_different_case()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_two_model_with_different_case()
+        self.assertEqual(expected_csv, normalized_csv)
 
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
-    def example_xml_only_one_brand(self):
-        return "<?xml version='1.0' encoding='utf-8'?>\n\
-<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
-    <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
-            <unidad />\n\
-        </modelo>\n\
-    </marca>\n\
-</marcas>\
-"
+
+    def example_normalized_csv_with_two_brands_with_different_case(self):
+        return """"Audi"\n"Audi\""""
+
+    def example_csv_with_two_model_with_different_case(self):
+        return "Toyota,COROLLA\ntoyota,coRolla"
+
+    def example_normalized_csv_with_two_model_with_different_case(self):
+        return """"Toyota","Corolla"\n"Toyota","Corolla\""""
+
+

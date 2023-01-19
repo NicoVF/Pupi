@@ -155,7 +155,8 @@ class Pupi:
         raise NotImplementedError('Subclass responsibility')
 
     def convert_to_xml(self, a_csv):
-        rows = csv.reader(a_csv.splitlines())
+        normalized_csv = self._normalize_csv(a_csv)
+        rows = csv.reader(normalized_csv.splitlines())
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
         for fields in rows:
@@ -187,6 +188,19 @@ class Pupi:
         ET.indent(brands, space='    ')
         xml = ET.tostring(brands, encoding="utf-8", method='xml', xml_declaration=True, ).decode('utf-8')
         return xml
+
+    def _normalize_csv(self, a_csv):
+        rows = csv.reader(a_csv.splitlines())
+        normalized_rows = []
+        for fields in rows:
+            normalized_fields = fields
+            normalized_fields[0] = normalized_fields[0].capitalize()
+            quoted_fields = ("\"" + field + "\"" for field in normalized_fields)
+            normalized_row = ",".join(quoted_fields)
+            normalized_rows.append(normalized_row)
+        normalized_csv = "\n".join(normalized_rows)
+
+        return normalized_csv
 
     def _unit_data_exists(self, unit_for_sale):
         return unit_for_sale.has_valid_brand()

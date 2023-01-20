@@ -206,6 +206,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_sales_type()
         self.assertEqual(expected_xml, created_xml)
 
+    def test25_error_nissan(self):
+        csv = self.csv_con_error_nissan()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.xml_correcto_para_error_nissan()
+        self.assertEqual(expected_xml, created_xml)
+
     def example_csv_brand_audi(self):
         return "audi"
 
@@ -216,7 +222,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
+        <modelo display=\"\" estado=\"activo\" enLista=\"activo\" id=\"\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -230,7 +236,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Toyota\" estado=\"activo\">\n\
-        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
+        <modelo display=\"\" estado=\"activo\" enLista=\"activo\" id=\"\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -244,7 +250,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -269,8 +275,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enlista=\"activo\" id=\"sportback\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -285,11 +291,11 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enlista=\"activo\" id=\"sportback\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
                 <unidad />\n\
             </version>\n\
-            <version display=\"1.2\" estado=\"activo\" enlista=\"activo\" id=\"1.2\">\n\
+            <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"1.2\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -304,8 +310,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enlista=\"activo\" id=\"sportback\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -316,7 +322,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Toyota\" estado=\"activo\">\n\
-        <modelo display=\"Etios\" estado=\"activo\" enlista=\"activo\" id=\"etios\">\n\
+        <modelo display=\"Etios\" estado=\"activo\" enLista=\"activo\" id=\"etios\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -328,12 +334,12 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
+        <modelo display=\"\" estado=\"activo\" enLista=\"activo\" id=\"\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
     <marca nombre=\"Toyota\" estado=\"activo\">\n\
-        <modelo display=\"\" estado=\"activo\" enlista=\"activo\" id=\"\">\n\
+        <modelo display=\"\" estado=\"activo\" enLista=\"activo\" id=\"\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -346,10 +352,10 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad />\n\
         </modelo>\n\
-        <modelo display=\"A3\" estado=\"activo\" enlista=\"activo\" id=\"a3\">\n\
+        <modelo display=\"A3\" estado=\"activo\" enLista=\"activo\" id=\"a3\">\n\
             <unidad />\n\
         </modelo>\n\
     </marca>\n\
@@ -363,8 +369,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enlista=\"activo\" id=\"sportback\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
                 <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
             </version>\n\
         </modelo>\n\
@@ -379,8 +385,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enlista=\"activo\"  id=\"sportback\"/>\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\"  id=\"sportback\"/>\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -393,7 +399,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -405,7 +411,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\">\n\
                 <imagenes>\n\
                     <url tipo=\"foto-agencia\">https://soybot.s3.amazonaws.com/media/paises/argentina/imagenes-whatapp/marcas/Ford/Focus/Focus.mp4</url>\n\
@@ -426,7 +432,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" anio=\"2013\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -440,7 +446,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad precio=\"1500000\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -454,7 +460,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad tipoCambio=\"USD\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -467,7 +473,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad zona=\"ACASSUSO,Av Libertador,14745\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -481,7 +487,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad lat=\"-34.5951836\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -495,7 +501,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad long=\"-58.3745734\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -509,7 +515,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad kilometros=\"58000\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -523,7 +529,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad cliente=\"Munafo Virtual\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -537,7 +543,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad proveedorProveedores=\"DeConcesionarias\" />\n\
         </modelo>\n\
     </marca>\n\
@@ -551,9 +557,40 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
-        <modelo display=\"A1\" estado=\"activo\" enlista=\"activo\" id=\"a1\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
             <unidad tipoVenta=\"Usado\" />\n\
         </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def csv_con_error_nissan(self):
+        return """""nissan,march,1.6 SENSE PURE DRIVE,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"SAN LUIS,Av. del Fundador esq, Las voces del Chorrillero,","-33,2941809","-66,2956203",ExpoUsados,DeConcesionarias,Usado
+nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"PILAR,Las Camelias,3190","-34,4383348","-58,7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
+"""""
+
+    def xml_correcto_para_error_nissan(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Nissan\" estado=\"activo\">\n\
+        <modelo display=\"March\" estado=\"activo\" enLista=\"activo\" id=\"8f40d11b-ad88-48eb-8b07-faec41214c52\">\n\
+          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"86579244-9e90-4f2b-a647-c17757c36d3e\">\n\
+            <unidad anio=\"2018\" precio=\"3100000\" id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" tipoCambio=\"ARS\" zona=\"San Luis,Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+              <imagenes>\n\
+                <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg</url>\n\
+              </imagenes>\n\
+            </unidad>\n\
+          </version>\n\
+        </modelo>\n\
+        <modelo display=\"Note\" estado=\"activo\" enLista=\"activo\" id=\"930f0b94-4146-4381-ac90-839839d8c54c\">\n\
+          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"a6cff808-2c3f-48b6-850c-cf9be8a08b55\">\n\
+            <unidad anio=\"2018\" precio=\"4290000\" id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" tipoCambio=\"ARS\" zona=\"Pilar,Las Camelias,3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+              <imagenes>\n\
+                <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg</url>\n\
+              </imagenes>\n\
+            </unidad>\n\
+          </version>\n\
+        </modelo> \n\
     </marca>\n\
 </marcas>\
 "
@@ -604,5 +641,6 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def example_normalized_csv_with_model_with_lat_and_long(self):
         return """"Audi","A1","","","","","","","","","-34.3745734","-58.3745734\""""
+
 
 

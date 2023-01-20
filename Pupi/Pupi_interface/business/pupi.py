@@ -171,14 +171,14 @@ class Pupi:
             model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() != previous_unit_for_sale.model()
             if model_node_must_be_inserted:
                 model = ET.SubElement(brand, "modelo", display=current_unit_for_sale.model().capitalize(),
-                                      estado='activo', enlista='activo', id=current_unit_for_sale.model().lower())
+                                      estado='activo', enLista='activo', id=current_unit_for_sale.model().lower())
                 last_valid_parent_for_unit_element = model
 
             version_node_must_be_inserted = current_unit_for_sale.version() is not None and\
                                             current_unit_for_sale.version() != previous_unit_for_sale.version()
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=current_unit_for_sale.version().capitalize(),
-                                        estado='activo', enlista='activo', id=current_unit_for_sale.version().lower())
+                                        estado='activo', enLista='activo', id=current_unit_for_sale.version().lower())
                 last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)

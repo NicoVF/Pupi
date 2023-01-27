@@ -176,6 +176,7 @@ class Pupi:
 
             version_node_must_be_inserted = current_unit_for_sale.version() is not None and\
                                             current_unit_for_sale.version() != previous_unit_for_sale.version()
+
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=current_unit_for_sale.version().capitalize(),
                                         estado='activo', enLista='activo', id=current_unit_for_sale.version().lower())
@@ -198,6 +199,8 @@ class Pupi:
             normalized_fields[0] = normalized_fields[0].capitalize()
             if len(fields) > 1:
                 normalized_fields[1] = normalized_fields[1].capitalize()
+            if len(fields) > 2:
+                normalized_fields[2] = self.capitalize_each_word(normalized_fields[2])
             if len(fields) > 10:
                 normalized_fields[10] = normalized_fields[10].replace(',', '.')
             if len(fields) > 11:
@@ -208,6 +211,12 @@ class Pupi:
         normalized_csv = "\n".join(normalized_rows)
 
         return normalized_csv
+
+    def capitalize_each_word(self, string):
+        words = string.split()
+        capitalized_words = [word.capitalize() for word in words]
+        capitalized_string = " ".join(capitalized_words)
+        return capitalized_string
 
     def _unit_data_exists(self, unit_for_sale):
         return unit_for_sale.has_valid_brand()

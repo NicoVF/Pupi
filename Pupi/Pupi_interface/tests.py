@@ -206,15 +206,11 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_sales_type()
         self.assertEqual(expected_xml, created_xml)
 
-    # def test25_same_version_but_different_model_must_insert_anyway(self):
-    #     csv = self.csv_con_same_version_but_different_model_must_insert_anyway()
-    #     created_xml = self.pupi.convert_to_xml(csv)
-    #     expected_xml = self.xml_correcto_para_same_version_but_different_model_must_insert_anyway()
-    #     self.assertEqual(expected_xml, created_xml)
-        
-    #PASA LO SIGUIENTE: NISSAN VERSA Y NISSAN NOTE SON MODELOS DISTINTOS, PERO AMBOS TIENEN UNA VERSION QUE SE LLAMA IGUAL
-    #CUANDO CREAMOS EL XML, QUEDA GUARDADO EL NODO VERSION DEL MODELO ANTERIOR Y TE CREA EL MODELO NUEVO SIN LA VERSION
-    # Y NO DEBERIA YA QUE ES UN MODELO DISTINTO
+    def test25_same_version_but_different_model_must_insert_anyway(self):
+        csv = self.csv_con_same_version_but_different_model_must_insert_anyway()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.xml_correcto_para_same_version_but_different_model_must_insert_anyway()
+        self.assertEqual(expected_xml, created_xml)
 
     def example_csv_brand_audi(self):
         return "audi"
@@ -577,18 +573,18 @@ nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.a
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Nissan\" estado=\"activo\">\n\
-        <modelo display=\"March\" estado=\"activo\" enLista=\"activo\" id=\"8f40d11b-ad88-48eb-8b07-faec41214c52\">\n\
-          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"86579244-9e90-4f2b-a647-c17757c36d3e\">\n\
-            <unidad anio=\"2018\" precio=\"3100000\" id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" tipoCambio=\"ARS\" zona=\"San Luis,Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+        <modelo display=\"March\" estado=\"activo\" enLista=\"activo\" id=\"march\">\n\
+          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
+            <unidad id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" anio=\"2018\" precio=\"3100000\" tipoCambio=\"ARS\" zona=\"San Luis,Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
               <imagenes>\n\
                 <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg</url>\n\
               </imagenes>\n\
             </unidad>\n\
           </version>\n\
         </modelo>\n\
-        <modelo display=\"Note\" estado=\"activo\" enLista=\"activo\" id=\"930f0b94-4146-4381-ac90-839839d8c54c\">\n\
-          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"a6cff808-2c3f-48b6-850c-cf9be8a08b55\">\n\
-            <unidad anio=\"2018\" precio=\"4290000\" id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" tipoCambio=\"ARS\" zona=\"Pilar,Las Camelias,3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+        <modelo display=\"Note\" estado=\"activo\" enLista=\"activo\" id=\"note\">\n\
+          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
+            <unidad id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" anio=\"2018\" precio=\"4290000\" tipoCambio=\"ARS\" zona=\"Pilar,Las Camelias,3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
               <imagenes>\n\
                 <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg</url>\n\
               </imagenes>\n\

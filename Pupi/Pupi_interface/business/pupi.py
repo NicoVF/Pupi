@@ -170,16 +170,17 @@ class Pupi:
 
             model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() != previous_unit_for_sale.model()
             if model_node_must_be_inserted:
-                model = ET.SubElement(brand, "modelo", display=current_unit_for_sale.model().capitalize(),
+                model = ET.SubElement(brand, "modelo", display=current_unit_for_sale.model(),
                                       estado='activo', enLista='activo', id=current_unit_for_sale.model().lower())
                 last_valid_parent_for_unit_element = model
 
-            version_node_must_be_inserted = current_unit_for_sale.version() is not None and\
-                                            current_unit_for_sale.version() != previous_unit_for_sale.version()
+            version_node_must_be_inserted = current_unit_for_sale.version() is not None and \
+                                            (current_unit_for_sale.version() != previous_unit_for_sale.version() or\
+                                            current_unit_for_sale.model() != previous_unit_for_sale.model())
 
             if version_node_must_be_inserted:
-                version = ET.SubElement(model, "version", display=current_unit_for_sale.version().capitalize(),
-                                        estado='activo', enLista='activo', id=current_unit_for_sale.version().lower())
+                version = ET.SubElement(model, "version", display=current_unit_for_sale.version(),
+                                        estado='activo', enLista='activo', id=current_unit_for_sale.version())
                 last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)
@@ -201,6 +202,8 @@ class Pupi:
                 normalized_fields[1] = normalized_fields[1].capitalize()
             if len(fields) > 2:
                 normalized_fields[2] = self.capitalize_each_word(normalized_fields[2])
+            if len(fields) > 6:
+                normalized_fields[6] = normalized_fields[6].lower()
             if len(fields) > 10:
                 normalized_fields[10] = normalized_fields[10].replace(',', '.')
             if len(fields) > 11:

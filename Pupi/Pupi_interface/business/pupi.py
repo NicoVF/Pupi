@@ -204,6 +204,8 @@ class Pupi:
                 normalized_fields[2] = self.capitalize_each_word(normalized_fields[2])
             if len(fields) > 6:
                 normalized_fields[6] = normalized_fields[6].lower()
+            # if len(fields) > 9:
+            #     normalized_fields[9] = self.capitalize_each_word(normalized_fields[9])
             if len(fields) > 10:
                 normalized_fields[10] = normalized_fields[10].replace(',', '.')
             if len(fields) > 11:

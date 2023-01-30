@@ -630,6 +630,12 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_long_version_name()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test04_capitalize_each_word_in_zone(self):
+        csv = self.example_csv_with_zone()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_zone()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -653,5 +659,11 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def example_normalized_csv_with_long_version_name(self):
         return """"Toyota","Corolla","1.6 Sense Drive Automatic"\n"Toyota","Corolla","1.6 Sense Drive Automatic\""""
+
+    def example_csv_with_brand_model_with_zone(self):
+        return "Audi,A1,,,,,,,,\"SAN LUIS,Av. del Fundador esq, Las voces del Chorrillero,\""
+
+    def example_normalized_csv_with_model_with_zone(self):
+        return """"Audi","A1","","","","","","","","SAN LUIS,Av. Del Fundador Esq, Las Voces Del Chorrillero,\""""
 
 

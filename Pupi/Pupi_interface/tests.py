@@ -285,17 +285,17 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_same_brand_and_model_with_two_version(self):
-        return "Audi,A1,Sportback\nAudi,A1,1.2"
+        return "Audi,A1,1.2\nAudi,A1,Sportback"
 
     def example_xml_brand_model_and_two_version_audi(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
+            <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"1.2\">\n\
                 <unidad />\n\
             </version>\n\
-            <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"1.2\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -648,6 +648,12 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_brand_and_model()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test08_normalization_sorts_brands(self):
+        csv = self.example_csv_with_brands_not_sorted()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_brands_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -689,5 +695,14 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def example_normalized_csv_with_brand_and_model(self):
         return """"Alfa Romeo\""""
+
+    def example_csv_with_brands_not_sorted(self):
+        return "Chevrolet\nAudi"
+
+    def example_normalized_csv_with_brands_sorted(self):
+        return """"Audi"\n"Chevrolet\""""
+
+
+
 
 

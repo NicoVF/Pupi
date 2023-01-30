@@ -39,6 +39,9 @@ class UnitForSale:
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self._id == other.id() and self._kilometers == other.kilometers()
 
+    def __lt__(self, other):
+        return self.brand() < other.brand()
+
     def brand(self):
         return self._brand
 
@@ -160,9 +163,9 @@ class Pupi:
         rows = csv.reader(normalized_csv.splitlines())
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
-        for fields in rows:
-
-            current_unit_for_sale = UnitForSale.create_unit_from(fields)
+        units_for_sale = [UnitForSale.create_unit_from(fields) for fields in rows]
+        units_for_sale.sort()
+        for current_unit_for_sale in units_for_sale:
 
             brand_node_must_be_inserted = current_unit_for_sale.brand() != previous_unit_for_sale.brand()
             if brand_node_must_be_inserted:

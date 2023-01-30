@@ -197,9 +197,9 @@ class Pupi:
         normalized_rows = []
         for fields in rows:
             normalized_fields = fields
-            normalized_fields[0] = normalized_fields[0].capitalize()
+            normalized_fields[0] = self.capitalize_each_word(normalized_fields[0])
             if len(fields) > 1:
-                normalized_fields[1] = normalized_fields[1].capitalize()
+                normalized_fields[1] = self.capitalize_each_word(normalized_fields[1])
             if len(fields) > 2:
                 normalized_fields[2] = self.capitalize_each_word(normalized_fields[2])
             if len(fields) > 6:
@@ -218,10 +218,7 @@ class Pupi:
         return normalized_csv
 
     def capitalize_each_word(self, string):
-        words = string.split()
-        capitalized_words = [word.capitalize() for word in words]
-        capitalized_string = " ".join(capitalized_words)
-        return capitalized_string
+        return string.title()
 
     def _unit_data_exists(self, unit_for_sale):
         return unit_for_sale.has_valid_brand()

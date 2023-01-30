@@ -264,7 +264,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         return "Audi\nToyota"
 
     def example_csv_with_same_brand_and_model_with_version(self):
-        return "Audi,A1,sportback"
+        return "Audi,A1,Sportback"
 
     def example_csv_with_two_same_brand_and_different_model(self):
         return "Audi,A1\nAudi,A3"
@@ -276,7 +276,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -285,14 +285,14 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_same_brand_and_model_with_two_version(self):
-        return "Audi,A1,sportback\nAudi,A1,1.2"
+        return "Audi,A1,Sportback\nAudi,A1,1.2"
 
     def example_xml_brand_model_and_two_version_audi(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
                 <unidad />\n\
             </version>\n\
             <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"1.2\">\n\
@@ -304,14 +304,14 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_same_brand_and_model_with_two_same_version(self):
-        return "Audi,A1,sportback\nAudi,A1,sportback"
+        return "Audi,A1,Sportback\nAudi,A1,Sportback"
 
     def example_xml_brand_model_and_two_same_version_audi(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -363,14 +363,14 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_brand_model_version_and_unit(self):
-        return "Audi,A1,sportback,,,,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
+        return "Audi,A1,Sportback,,,,d6ac50a9-8377-4b2d-bcf8-8d50d4be9782"
 
     def example_xml_brand_model_version_and_unit(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
                 <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
             </version>\n\
         </modelo>\n\
@@ -467,14 +467,14 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 </marcas>\
 "
     def example_csv_with_brand_model_with_unit_zone(self):
-        return "Audi,A1,,,,,,,,\"ACASSUSO,Av Libertador,14745\""
+        return "Audi,A1,,,,,,,,\"Acassuso, Av Libertador, 14745\""
 
     def example_xml_brand_model_with_unit_zone(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <unidad zona=\"ACASSUSO,Av Libertador,14745\" />\n\
+            <unidad zona=\"Acassuso, Av Libertador, 14745\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -565,8 +565,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def csv_con_same_version_but_different_model_must_insert_anyway(self):
-        return """""nissan,March,1.6 SENSE PURE DRIVE,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"SAN LUIS,Av. del Fundador esq, Las voces del Chorrillero,","-33,2941809","-66,2956203",ExpoUsados,DeConcesionarias,Usado
-nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"PILAR,Las Camelias,3190","-34,4383348","-58,7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
+        return """""nissan,March,1.6 SENSE PURE DRIVE,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"SAN LUIS, Av. del Fundador esq, Las voces del Chorrillero,","-33,2941809","-66,2956203",ExpoUsados,DeConcesionarias,Usado
+nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"PILAR, Las Camelias, 3190","-34,4383348","-58,7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
 """""
 
     def xml_correcto_para_same_version_but_different_model_must_insert_anyway(self):
@@ -574,23 +574,23 @@ nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.a
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Nissan\" estado=\"activo\">\n\
         <modelo display=\"March\" estado=\"activo\" enLista=\"activo\" id=\"march\">\n\
-          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
-            <unidad id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" anio=\"2018\" precio=\"3100000\" tipoCambio=\"ARS\" zona=\"San Luis,Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
-              <imagenes>\n\
-                <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg</url>\n\
-              </imagenes>\n\
-            </unidad>\n\
-          </version>\n\
+            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
+                <unidad id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" anio=\"2018\" precio=\"3100000\" tipoCambio=\"ARS\" zona=\"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+                    <imagenes>\n\
+                        <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg</url>\n\
+                    </imagenes>\n\
+                </unidad>\n\
+            </version>\n\
         </modelo>\n\
         <modelo display=\"Note\" estado=\"activo\" enLista=\"activo\" id=\"note\">\n\
-          <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
-            <unidad id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" anio=\"2018\" precio=\"4290000\" tipoCambio=\"ARS\" zona=\"Pilar,Las Camelias,3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
-              <imagenes>\n\
-                <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg</url>\n\
-              </imagenes>\n\
-            </unidad>\n\
-          </version>\n\
-        </modelo> \n\
+            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
+                <unidad id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" anio=\"2018\" precio=\"4290000\" tipoCambio=\"ARS\" zona=\"Pilar, Las Camelias, 3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+                    <imagenes>\n\
+                        <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg</url>\n\
+                    </imagenes>\n\
+                </unidad>\n\
+            </version>\n\
+        </modelo>\n\
     </marca>\n\
 </marcas>\
 "

@@ -666,6 +666,12 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_versions_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 
+    # def test11_normalization_sorts_highest_price_first_within_same_units(self):
+    #     csv = self.example_csv_with_same_units_not_sorted()
+    #     normalized_csv = self.pupi._normalize_csv(csv)
+    #     expected_csv = self.example_normalized_csv_with_same_unit_sorted()
+    #     self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -726,7 +732,13 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
     def example_normalized_csv_with_versions_sorted(self):
         return """"Audi","A1","1.4T Turbo"\n"Audi","A1","Bt. Tetronic\""""
 
-    
+    def example_csv_with_same_units_not_sorted(self):
+        return "Audi,A1,,,1500000\nAudi,A1,,,2500000"
+
+    def example_normalized_csv_with_same_unit_sorted(self):
+        return """"Audi","A1","","","2500000"\n"Audi","A1","","","1500000"\""""
+
+
 
 
 

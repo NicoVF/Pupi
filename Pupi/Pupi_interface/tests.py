@@ -654,6 +654,18 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_brands_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test09_normalization_sorts_model_with_same_brand(self):
+        csv = self.example_csv_with_models_not_sorted()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_models_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test10_normalization_sorts_version_with_same_model(self):
+        csv = self.example_csv_with_versions_not_sorted()
+        normalized_csv = self.pupi._normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_versions_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -702,6 +714,19 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
     def example_normalized_csv_with_brands_sorted(self):
         return """"Audi"\n"Chevrolet\""""
 
+    def example_csv_with_models_not_sorted(self):
+        return "Audi,B250\nAudi,A1"
+
+    def example_normalized_csv_with_models_sorted(self):
+        return """"Audi","A1"\n"Audi","B250\""""
+
+    def example_csv_with_versions_not_sorted(self):
+        return "Audi,A1,Bt. Tetronic\nAudi,A1,1.4T Turbo"
+
+    def example_normalized_csv_with_versions_sorted(self):
+        return """"Audi","A1","1.4T Turbo"\n"Audi","A1","Bt. Tetronic\""""
+
+    
 
 
 

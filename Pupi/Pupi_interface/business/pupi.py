@@ -164,7 +164,6 @@ class Pupi:
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
         units_for_sale = [UnitForSale.create_unit_from(fields) for fields in rows]
-        units_for_sale.sort()
         for current_unit_for_sale in units_for_sale:
 
             brand_node_must_be_inserted = current_unit_for_sale.brand() != previous_unit_for_sale.brand()
@@ -216,6 +215,7 @@ class Pupi:
             quoted_fields = ("\"" + field + "\"" for field in normalized_fields)
             normalized_row = ",".join(quoted_fields)
             normalized_rows.append(normalized_row)
+        normalized_rows.sort()
         normalized_csv = "\n".join(normalized_rows)
 
         return normalized_csv

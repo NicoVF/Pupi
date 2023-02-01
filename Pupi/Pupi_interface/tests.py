@@ -608,61 +608,61 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def test01_ignore_case_in_brand_name(self):
         csv = self.example_csv_with_two_brands_with_different_case()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_two_brands_with_different_case()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test02_ignore_case_in_model_name(self):
         csv = self.example_csv_with_two_model_with_different_case()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_two_model_with_different_case()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test03_replace_comma_with_dot_in_lat_and_long(self):
         csv = self.example_csv_with_model_with_lat_and_long()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_model_with_lat_and_long()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test04_capitalize_each_word_in_version(self):
         csv = self.example_csv_with_long_version_name()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_long_version_name()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test05_capitalize_each_word_in_zone(self):
         csv = self.example_csv_with_model_with_zone()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_model_with_zone()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test06_capitalize_each_word_in_brand(self):
         csv = self.example_csv_with_model()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_model()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test07_capitalize_each_word_in_brand_and_model(self):
         csv = self.example_csv_with_brand_and_model()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_brand_and_model()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test08_normalization_sorts_brands(self):
         csv = self.example_csv_with_brands_not_sorted()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_brands_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test09_normalization_sorts_model_with_same_brand(self):
         csv = self.example_csv_with_models_not_sorted()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_models_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 
     def test10_normalization_sorts_version_with_same_model(self):
         csv = self.example_csv_with_versions_not_sorted()
-        normalized_csv = self.pupi._normalize_csv(csv)
+        normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_versions_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 

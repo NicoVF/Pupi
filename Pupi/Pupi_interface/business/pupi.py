@@ -159,7 +159,7 @@ class Pupi:
         raise NotImplementedError('Subclass responsibility')
 
     def convert_to_xml(self, a_csv):
-        normalized_csv = self._normalize_csv(a_csv)
+        normalized_csv = self.normalize_csv(a_csv)
         rows = csv.reader(normalized_csv.splitlines())
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
@@ -194,7 +194,7 @@ class Pupi:
         xml = ET.tostring(brands, encoding="utf-8", method='xml', xml_declaration=True, ).decode('utf-8')
         return xml
 
-    def _normalize_csv(self, a_csv):
+    def normalize_csv(self, a_csv):
         rows = csv.reader(a_csv.splitlines())
         normalized_rows = []
         for fields in rows:

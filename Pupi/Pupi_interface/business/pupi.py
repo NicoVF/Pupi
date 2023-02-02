@@ -241,6 +241,12 @@ class Pupi:
                 return 1
             if row1[2] < row2[2]:
                 return -1
+            # if len(row1) < 4 or len(row2) < 4:
+            #     return 0
+            # if int(row1[3][1:-1]) < int(row2[3][1:-1]):
+            #     return 1
+            # if int(row1[3][1:-1]) > int(row2[3][1:-1]):
+            #     return -1
             if len(row1) < 5 or len(row2) < 5:
                 return 0
             if int(row1[4][1:-1]) < int(row2[4][1:-1]):

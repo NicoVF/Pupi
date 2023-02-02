@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.test import TestCase
 
 import unittest
@@ -678,6 +680,20 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_same_unit_sorted()
         self.assertEqual(expected_csv, normalized_csv)
 
+    @skip("work in progress")
+    def test13_normalization_sorts_units_by_year(self):
+        csv = self.example_csv_with_same_units_by_year()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_same_unit_by_year_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    @skip("work in progress")
+    def test14_normalization_sorts_units_by_year_with_only_one_year(self):
+        csv = self.example_csv_with_same_units_by_year_with_only_one_year()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_same_unit_by_year_with_only_one_year_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -749,6 +765,20 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
 
     def example_normalized_csv_with_same_unit_sorted(self):
         return """"Audi","A1","","","2500000"\n"Audi","A1","","","1500000\""""
+
+    def example_csv_with_same_units_by_year(self):
+        return "Audi,A1,,2019\nAudi,A1,,2022"
+
+    def example_normalized_csv_with_same_unit_by_year_sorted(self):
+        return """"Audi","A1","","2022"\n"Audi","A1","","2019\""""
+
+    def example_csv_with_same_units_by_year_with_only_one_year(self):
+        return "Audi,A1,,\nAudi,A1,,2022"
+
+    def example_normalized_csv_with_same_unit_by_year_sorted_with_only_one_year(self):
+        return """"Audi","A1","","2022"\n"Audi","A1","","\""""
+
+
 
 
 

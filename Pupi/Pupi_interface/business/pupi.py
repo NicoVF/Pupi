@@ -3,7 +3,6 @@ import xml.etree.ElementTree as ET
 from functools import cmp_to_key
 
 
-
 class UnitForSale:
     NO_BRAND = None
     NO_MODEL = ""
@@ -21,7 +20,8 @@ class UnitForSale:
     NO_PROVIDER_OF_PROVIDERS = ""
     NO_SALES_TYPE = ""
 
-    def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud, provider, provider_of_providers, sales_type):
+    def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud,
+                 provider, provider_of_providers, sales_type):
         self._brand = brand
         self._model = model
         self._version = version
@@ -76,7 +76,7 @@ class UnitForSale:
 
     def has_currency(self):
         return self._currency != self.NO_CURRENCY
-    
+
     def zone(self):
         return self._zone
 
@@ -112,7 +112,7 @@ class UnitForSale:
 
     def has_sales_type(self):
         return self._sales_type != self.NO_SALES_TYPE
-    
+
     def price(self):
         return self._price
 
@@ -170,17 +170,19 @@ class Pupi:
 
             brand_node_must_be_inserted = current_unit_for_sale.brand() != previous_unit_for_sale.brand()
             if brand_node_must_be_inserted:
-                brand = ET.SubElement(brands, "marca", nombre=current_unit_for_sale.brand().capitalize(), estado='activo')
+                brand = ET.SubElement(brands, "marca", nombre=current_unit_for_sale.brand().capitalize(),
+                                      estado='activo')
 
-            model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() != previous_unit_for_sale.model()
+            model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() !=\
+                                          previous_unit_for_sale.model()
             if model_node_must_be_inserted:
                 model = ET.SubElement(brand, "modelo", display=current_unit_for_sale.model(),
                                       estado='activo', enLista='activo', id=current_unit_for_sale.model().lower())
                 last_valid_parent_for_unit_element = model
 
             version_node_must_be_inserted = current_unit_for_sale.version() is not None and \
-                                            (current_unit_for_sale.version() != previous_unit_for_sale.version() or\
-                                            current_unit_for_sale.model() != previous_unit_for_sale.model())
+                                            (current_unit_for_sale.version() != previous_unit_for_sale.version() or \
+                                             current_unit_for_sale.model() != previous_unit_for_sale.model())
 
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=current_unit_for_sale.version(),
@@ -221,8 +223,8 @@ class Pupi:
         normalized_csv = "\n".join(sorted_joined_rows)
         return normalized_csv
 
-    def _sort_rows(self,rows):
-        def compare_rows(row1,row2):
+    def _sort_rows(self, rows):
+        def compare_rows(row1, row2):
             if row1[0] > row2[0]:
                 return 1
             if row1[0] < row2[0]:
@@ -238,6 +240,12 @@ class Pupi:
             if row1[2] > row2[2]:
                 return 1
             if row1[2] < row2[2]:
+                return -1
+            if len(row1) < 5 or len(row2) < 5:
+                return 0
+            if int(row1[4][1:-1]) < int(row2[4][1:-1]):
+                return 1
+            if int(row1[4][1:-1]) > int(row2[4][1:-1]):
                 return -1
             return 0
 
@@ -296,13 +304,9 @@ class Pupi:
         unit_for_sale = self.row_to_unit(row)
         xml_element = self.unit_to_xml(unit_for_sale)
         formatted_xml_element = self.format_xml(xml_element)
+
     def _practica(self):
         row = ""
         unit_for_sale = self.row_to_unit(row)
         formatted_unit = self.format_unit(unit_for_sale)
         xml_element = self.unit_to_xml(formatted_unit)
-
-
-
-
-

@@ -1,5 +1,7 @@
 import csv
 import xml.etree.ElementTree as ET
+from functools import cmp_to_key
+
 
 
 class UnitForSale:
@@ -212,13 +214,34 @@ class Pupi:
                 normalized_fields[10] = normalized_fields[10].replace(',', '.')
             if len(fields) > 11:
                 normalized_fields[11] = normalized_fields[11].replace(',', '.')
-            quoted_fields = ("\"" + field + "\"" for field in normalized_fields)
-            normalized_row = ",".join(quoted_fields)
-            normalized_rows.append(normalized_row)
-        normalized_rows.sort()
-        normalized_csv = "\n".join(normalized_rows)
-
+            quoted_fields = ["\"" + field + "\"" for field in normalized_fields]
+            normalized_rows.append(quoted_fields)
+        sorted_rows = self._sort_rows(normalized_rows)
+        sorted_joined_rows = [",".join(quoted_fields) for quoted_fields in sorted_rows]
+        normalized_csv = "\n".join(sorted_joined_rows)
         return normalized_csv
+
+    def _sort_rows(self,rows):
+        def compare_rows(row1,row2):
+            if row1[0] > row2[0]:
+                return 1
+            if row1[0] < row2[0]:
+                return -1
+            if len(row1) < 2 or len(row2) < 2:
+                return 0
+            if row1[1] > row2[1]:
+                return 1
+            if row1[1] < row2[1]:
+                return -1
+            if len(row1) < 3 or len(row2) < 3:
+                return 0
+            if row1[2] > row2[2]:
+                return 1
+            if row1[2] < row2[2]:
+                return -1
+            return 0
+
+        return sorted(rows, key=cmp_to_key(compare_rows))
 
     def capitalize_each_word(self, string):
         return string.title()
@@ -278,6 +301,8 @@ class Pupi:
         unit_for_sale = self.row_to_unit(row)
         formatted_unit = self.format_unit(unit_for_sale)
         xml_element = self.unit_to_xml(formatted_unit)
+
+
 
 
 

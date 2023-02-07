@@ -5,7 +5,7 @@ from django.test import TestCase
 import unittest
 
 from Pupi_interface.business import Cliente
-from Pupi_interface.business.pupi import Pupi
+from Pupi_interface.business.pupi import Pupi, UnitForSale
 from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
 
@@ -650,50 +650,6 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_brand_and_model()
         self.assertEqual(expected_csv, normalized_csv)
 
-    def test08_normalization_sorts_brands(self):
-        csv = self.example_csv_with_brands_not_sorted()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_brands_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    def test09_normalization_sorts_model_with_same_brand(self):
-        csv = self.example_csv_with_models_not_sorted()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_models_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    def test10_normalization_sorts_model_with_different_brand(self):
-        csv = self.example_csv_with_models_not_sorted_and_different_brand()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_models_sorted_and_different_brand()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    def test11_normalization_sorts_version_with_same_model(self):
-        csv = self.example_csv_with_versions_not_sorted()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_versions_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    def test12_normalization_sorts_highest_price_first_within_same_units(self):
-        csv = self.example_csv_with_same_units_not_sorted()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_same_unit_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    @skip("work in progress")
-    def test13_normalization_sorts_units_by_year(self):
-        csv = self.example_csv_with_same_units_by_year()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_same_unit_by_year_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
-    @skip("work in progress")
-    def test14_normalization_sorts_units_by_year_with_only_one_year(self):
-        csv = self.example_csv_with_same_units_by_year_with_only_one_year()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_same_unit_by_year_with_only_one_year_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
-
     def example_csv_with_two_brands_with_different_case(self):
         return "AUDI\naudi"
 
@@ -779,7 +735,83 @@ class PupiNormalizationWhenConvertingCsvToXmlTest(unittest.TestCase):
         return """"Audi","A1","","2022"\n"Audi","A1","","\""""
 
 
+class PupiSortUnitForSaleTest(unittest.TestCase):
 
+    def __init__(self, methodName: str = ...):
+        super().__init__(methodName)
+
+    def setUp(self):
+        self.unit_audi = UnitForSale.create_unit_from(["Audi"])
+        self.unit_audi_A1 = UnitForSale.create_unit_from(["Audi", "A1"])
+        self.unit_audi_A3 = UnitForSale.create_unit_from(["Audi", "A3"])
+        self.unit_fiat = UnitForSale.create_unit_from(["Fiat"])
+        self.unit_fiat_palio_nafta = UnitForSale.create_unit_from(["Fiat", "Palio", "Nafta"])
+        self.unit_fiat_palio_gnc = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC"])
+        super(PupiSortUnitForSaleTest, self).setUp()
+        self.pupi = Pupi()
+
+    def test01_sorts_brands(self):
+        units = self.example_units_with_brands_not_sorted()
+        sorted_units = self.pupi._sort_units_for_sale(units)
+        expected_units = self.example_units_with_brands_sorted()
+        self.assertEqual(expected_units, sorted_units)
+
+    def test02_sorts_model_with_same_brand(self):
+        units = self.example_units_with_models_not_sorted()
+        sorted_units = self.pupi._sort_units_for_sale(units)
+        expected_units = self.example_units_with_models_sorted()
+        self.assertEqual(expected_units, sorted_units)
+
+    def test03_sorts_version_with_same_model(self):
+        units = self.example_units_with_versions_not_sorted()
+        sorted_units = self.pupi._sort_units_for_sale(units)
+        expected_units = self.example_units_with_versions_sorted()
+        self.assertEqual(expected_units, sorted_units)
+
+    @skip("work in progress")
+    def test12_normalization_sorts_highest_price_first_within_same_units(self):
+        csv = self.example_csv_with_same_units_not_sorted()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_same_unit_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    @skip("work in progress")
+    def test13_normalization_sorts_units_by_year(self):
+        csv = self.example_csv_with_same_units_by_year()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_same_unit_by_year_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    @skip("work in progress")
+    def test14_normalization_sorts_units_by_year_with_only_one_year(self):
+        csv = self.example_csv_with_same_units_by_year_with_only_one_year()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_same_unit_by_year_with_only_one_year_sorted()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def example_units_with_brands_not_sorted(self):
+        return [self.unit_fiat,
+                self.unit_audi]
+
+    def example_units_with_brands_sorted(self):
+        return [self.unit_audi,
+                self.unit_fiat]
+
+    def example_units_with_models_not_sorted(self):
+        return [self.unit_audi_A3,
+                self.unit_audi_A1]
+
+    def example_units_with_models_sorted(self):
+        return [self.unit_audi_A1,
+                self.unit_audi_A3]
+
+    def example_units_with_versions_not_sorted(self):
+        return [self.unit_fiat_palio_nafta,
+                self.unit_fiat_palio_gnc]
+
+    def example_units_with_versions_sorted(self):
+        return [self.unit_fiat_palio_gnc,
+                self.unit_fiat_palio_nafta]
 
 
 

@@ -39,12 +39,36 @@ class UnitForSale:
         self._sales_type = sales_type
 
     def __eq__(self, other):
-        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self._id == other.id() and self._kilometers == other.kilometers()
+        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price()
 
     def __lt__(self, other):
-        return self.brand() < other.brand()
+        if self.brand() < other.brand():
+            return True
+        if self.brand() > other.brand():
+            return False
+        if self.model() < other.model():
+            return True
+        if self.model() > other.model():
+            return False
+        if not self.has_version() and not other.has_version():
+            return False
+        if self.version() < other.version():
+            return True
+        if self.version() > other.version():
+            return False
+        if self.price() < other.price():
+            return True
+        if self.price() > other.price():
+            return False
 
     def compare_to(self, other):
+        if self == other:
+            return 0
+        if self > other:
+            return 1
+        return -1
+
+    def compare_to2(self, other):
         if self.brand() > other.brand():
             return 1
         if self.brand() < other.brand():

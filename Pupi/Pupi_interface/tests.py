@@ -1,12 +1,8 @@
-from unittest import skip
-
-from django.test import TestCase
-
 import unittest
+from unittest import skip
 
 from Pupi_interface.business import Cliente
 from Pupi_interface.business.pupi import Pupi, UnitForSale
-from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
 
 
@@ -747,6 +743,9 @@ class PupiSortUnitForSaleTest(unittest.TestCase):
         self.unit_fiat = UnitForSale.create_unit_from(["Fiat"])
         self.unit_fiat_palio_nafta = UnitForSale.create_unit_from(["Fiat", "Palio", "Nafta"])
         self.unit_fiat_palio_gnc = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC"])
+        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "150"])
+        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "250"])
+        self.unit_fiat_palio_gnc_precio350 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "350"])
         super(PupiSortUnitForSaleTest, self).setUp()
         self.pupi = Pupi()
 
@@ -768,12 +767,13 @@ class PupiSortUnitForSaleTest(unittest.TestCase):
         expected_units = self.example_units_with_versions_sorted()
         self.assertEqual(expected_units, sorted_units)
 
+
     @skip("work in progress")
     def test12_normalization_sorts_highest_price_first_within_same_units(self):
-        csv = self.example_csv_with_same_units_not_sorted()
-        normalized_csv = self.pupi.normalize_csv(csv)
-        expected_csv = self.example_normalized_csv_with_same_unit_sorted()
-        self.assertEqual(expected_csv, normalized_csv)
+        units = self.example_units_with_same_units_not_sorted()
+        sorted_units = self.pupi._sort_units_for_sale(units)
+        expected_units = self.example_units_with_same_unit_sorted()
+        self.assertEqual(expected_units, sorted_units)
 
     @skip("work in progress")
     def test13_normalization_sorts_units_by_year(self):
@@ -813,7 +813,55 @@ class PupiSortUnitForSaleTest(unittest.TestCase):
         return [self.unit_fiat_palio_gnc,
                 self.unit_fiat_palio_nafta]
 
+    def example_units_with_same_units_not_sorted(self):
+        return [self.unit_fiat_palio_gnc_precio250,
+                self.unit_fiat_palio_gnc_precio150]
+
+    def example_units_with_same_unit_sorted(self):
+        return [self.unit_fiat_palio_gnc_precio150,
+                self.unit_fiat_palio_gnc_precio250]
 
 
+class PupiForSaleOrderTest(unittest.TestCase):
+
+    def __init__(self, methodName: str = ...):
+        super().__init__(methodName)
+
+    def setUp(self):
+        self.unit_audi = UnitForSale.create_unit_from(["Audi"])
+        self.unit_audi_A1 = UnitForSale.create_unit_from(["Audi", "A1"])
+        self.unit_audi_A3 = UnitForSale.create_unit_from(["Audi", "A3"])
+        self.unit_fiat = UnitForSale.create_unit_from(["Fiat"])
+        self.unit_fiat_palio_nafta = UnitForSale.create_unit_from(["Fiat", "Palio", "Nafta"])
+        self.unit_fiat_palio_gnc = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC"])
+        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "150"])
+        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "250"])
+        self.unit_fiat_palio_gnc_precio350 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "350"])
+        super(PupiForSaleOrderTest, self).setUp()
+        self.pupi = Pupi()
+
+    def test01(self):
+        self.assertEqual(self.unit_audi, self.unit_audi)
+
+    def test02(self):
+        self.assertNotEqual(self.unit_audi_A1, self.unit_audi_A3)
+
+    def test03(self):
+        self.assertLess(self.unit_audi_A1, self.unit_audi_A3)
+
+    def test04(self):
+        self.assertGreater(self.unit_audi_A3, self.unit_audi_A1)
+
+    def testxx1(self):
+        self.assertEqual(self.unit_fiat_palio_gnc_precio150, self.unit_fiat_palio_gnc_precio150)
+
+    def testxx2(self):
+        self.assertNotEqual(self.unit_fiat_palio_gnc_precio150, self.unit_fiat_palio_gnc_precio250)
+
+    def testxx3(self):
+        self.assertLess(self.unit_fiat_palio_gnc_precio150, self.unit_fiat_palio_gnc_precio250)
+
+    def testxx4(self):
+        self.assertGreater(self.unit_fiat_palio_gnc_precio250, self.unit_fiat_palio_gnc_precio150)
 
 

@@ -53,11 +53,16 @@ class UnitForSale:
             return 1
         if self.model() < other.model():
             return -1
+        if not self.has_version() and not other.has_version():
+            return 0
         if self.version() > other.version():
             return 1
         if self.version() < other.version():
             return -1
         return 0
+
+    def has_version(self):
+        return self.NO_VERSION != self.version()
 
     def brand(self):
         return self._brand

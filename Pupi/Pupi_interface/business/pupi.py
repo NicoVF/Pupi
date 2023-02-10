@@ -39,7 +39,7 @@ class UnitForSale:
         self._sales_type = sales_type
 
     def __eq__(self, other):
-        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price()
+        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price() and self.year() == other.year()
 
     def __lt__(self, other):
         if self.brand() < other.brand():
@@ -55,6 +55,10 @@ class UnitForSale:
         if self.version() < other.version():
             return True
         if self.version() > other.version():
+            return False
+        if self.year() < other.year():
+            return True
+        if self.year() > other.year():
             return False
         if self.price() < other.price():
             return True
@@ -185,7 +189,7 @@ class UnitForSale:
                    model=fields[1] if len(fields) > 1 else cls.NO_MODEL,
                    version=fields[2] if len(fields) > 2 and fields[2] != "" else cls.NO_VERSION,
                    year=fields[3] if len(fields) > 3 else cls.NO_YEAR,
-                   price=fields[4] if len(fields) > 4 else cls.NO_PRICE,
+                   price=cls.get_price(fields),
                    image=fields[5] if len(fields) > 5 else cls.NO_IMAGE,
                    id=fields[6] if len(fields) > 6 else cls.NO_ID,
                    kilometers=fields[7] if len(fields) > 7 else cls.NO_KILOMETERS,
@@ -197,6 +201,12 @@ class UnitForSale:
                    provider_of_providers=fields[13] if len(fields) > 13 else cls.NO_PROVIDER_OF_PROVIDERS,
                    sales_type=fields[14] if len(fields) > 14 else cls.NO_SALES_TYPE,
                    )
+
+    @classmethod
+    def get_price(cls, fields):
+        if len(fields) > 4:
+            return fields[4]
+        return cls.NO_PRICE
 
 
 class Pupi:
@@ -266,7 +276,6 @@ class Pupi:
         sorted_joined_rows = [",".join(quoted_fields) for quoted_fields in normalized_rows]
         normalized_csv = "\n".join(sorted_joined_rows)
         return normalized_csv
-
 
     def capitalize_each_word(self, string):
         return string.title()

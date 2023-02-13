@@ -959,6 +959,5 @@ class PupiForSaleOrderTest(unittest.TestCase):
 
     def test16_first_unit_great_than_second_unit_with_year(self):
         self.assertGreater(self.unit_fiat_palio_gnc_anio2018, self.unit_fiat_palio_gnc_anio2015)
-    @skip
     def test17_lexicographic_order_of_price_doesnt_matter(self):
         self.assertLess(self.unit_fiat_palio_gnc_precio250, self.unit_fiat_palio_gnc_precio1000)

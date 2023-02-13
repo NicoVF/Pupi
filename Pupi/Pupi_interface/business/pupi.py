@@ -188,7 +188,7 @@ class UnitForSale:
         return cls(brand=fields[0],
                    model=fields[1] if len(fields) > 1 else cls.NO_MODEL,
                    version=fields[2] if len(fields) > 2 and fields[2] != "" else cls.NO_VERSION,
-                   year=fields[3] if len(fields) > 3 else cls.NO_YEAR,
+                   year=cls.get_year(fields),
                    price=cls.get_price(fields),
                    image=fields[5] if len(fields) > 5 else cls.NO_IMAGE,
                    id=fields[6] if len(fields) > 6 else cls.NO_ID,
@@ -203,10 +203,20 @@ class UnitForSale:
                    )
 
     @classmethod
+    def get_year(cls, fields):
+        if len(fields) < 4:
+            return cls.NO_YEAR
+        if not fields[3].isdigit():
+            return cls.NO_YEAR
+        return int(fields[3])
+
+    @classmethod
     def get_price(cls, fields):
-        if len(fields) > 4:
-            return fields[4]
-        return cls.NO_PRICE
+        if len(fields) < 5:
+            return cls.NO_PRICE
+        if not fields[4].isdigit():
+            return cls.NO_PRICE
+        return int(fields[4])
 
 
 class Pupi:
@@ -290,9 +300,9 @@ class Pupi:
         if unit_for_sale.has_kilometers():
             unit_attr["kilometros"] = unit_for_sale.kilometers()
         if unit_for_sale.has_year():
-            unit_attr["anio"] = unit_for_sale.year()
+            unit_attr["anio"] = str(unit_for_sale.year())
         if unit_for_sale.has_price():
-            unit_attr["precio"] = unit_for_sale.price()
+            unit_attr["precio"] = str(unit_for_sale.price())
         if unit_for_sale.has_currency():
             unit_attr["tipoCambio"] = unit_for_sale.currency()
         if unit_for_sale.has_zone():
@@ -376,3 +386,12 @@ class Pupi:
             return 0
 
         return sorted(rows, key=cmp_to_key(compare_rows))
+
+    def _to_string_int_fields_of_unit_for_sale(self, sorted_units_for_sale):
+        for unit in sorted_units_for_sale:
+            if unit.has_year():
+                unit.year_to_str()
+            if unit.has_price():
+                unit.price_to_str()
+        return
+

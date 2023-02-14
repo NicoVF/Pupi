@@ -204,7 +204,13 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         expected_xml = self.example_xml_brand_model_with_unit_sales_type()
         self.assertEqual(expected_xml, created_xml)
 
-    def test25_same_version_but_different_model_must_insert_anyway(self):
+    def test25_we_write_the_client_ID_in_the_xml(self):
+        csv = self.example_csv_with_client_id()
+        created_xml = self.pupi.convert_to_xml(csv)
+        expected_xml = self.example_xml_with_client_id()
+        self.assertEqual(expected_xml, created_xml)
+
+    def test26_same_version_but_different_model_must_insert_anyway(self):
         csv = self.csv_con_same_version_but_different_model_must_insert_anyway()
         created_xml = self.pupi.convert_to_xml(csv)
         expected_xml = self.xml_correcto_para_same_version_but_different_model_must_insert_anyway()
@@ -588,6 +594,20 @@ nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.a
                     </imagenes>\n\
                 </unidad>\n\
             </version>\n\
+        </modelo>\n\
+    </marca>\n\
+</marcas>\
+"
+
+    def example_csv_with_client_id(self):
+        return "Audi,A1,,,,,,,,,,,,,,b913a258-6ab0-406b-bae7-e4f8e5d0e6ewqr"
+
+    def example_xml_with_client_id(self):
+        return "<?xml version='1.0' encoding='utf-8'?>\n\
+<marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
+    <marca nombre=\"Audi\" estado=\"activo\">\n\
+        <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
+            <unidad idDeCliente=\"b913a258-6ab0-406b-bae7-e4f8e5d0e6ewqr\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\

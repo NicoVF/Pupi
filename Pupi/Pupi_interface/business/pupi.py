@@ -19,9 +19,10 @@ class UnitForSale:
     NO_PROVIDER = ""
     NO_PROVIDER_OF_PROVIDERS = ""
     NO_SALES_TYPE = ""
+    NO_CLIENT_ID = ""
 
     def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud,
-                 provider, provider_of_providers, sales_type):
+                 provider, provider_of_providers, sales_type, client_id):
         self._brand = brand
         self._model = model
         self._version = version
@@ -37,6 +38,7 @@ class UnitForSale:
         self._provider = provider
         self._provider_of_providers = provider_of_providers
         self._sales_type = sales_type
+        self._client_id = client_id
 
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price() and self.year() == other.year()
@@ -71,23 +73,6 @@ class UnitForSale:
         if self > other:
             return 1
         return -1
-
-    def compare_to2(self, other):
-        if self.brand() > other.brand():
-            return 1
-        if self.brand() < other.brand():
-            return -1
-        if self.model() > other.model():
-            return 1
-        if self.model() < other.model():
-            return -1
-        if not self.has_version() and not other.has_version():
-            return 0
-        if self.version() > other.version():
-            return 1
-        if self.version() < other.version():
-            return -1
-        return 0
 
     def has_version(self):
         return self.NO_VERSION != self.version()
@@ -176,12 +161,21 @@ class UnitForSale:
     def has_image(self):
         return self._image is not self.NO_IMAGE
 
+    def client_id(self):
+        return self._client_id
+
+    def has_client_id(self):
+        return self._client_id is not self.NO_CLIENT_ID
+
+
+
     @classmethod
     def no_unit_for_sale(cls):
         return cls(brand=cls.NO_BRAND, model=cls.NO_MODEL, version=cls.NO_VERSION, year=cls.NO_YEAR, price=cls.NO_PRICE,
                    image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, currency=cls.NO_CURRENCY,
                    zone=cls.NO_ZONE, latitud=cls.NO_LATITUD, longitud=cls.NO_LONGITUD, provider=cls.NO_PROVIDER,
-                   provider_of_providers=cls.NO_PROVIDER_OF_PROVIDERS, sales_type=cls.NO_SALES_TYPE)
+                   provider_of_providers=cls.NO_PROVIDER_OF_PROVIDERS, sales_type=cls.NO_SALES_TYPE,
+                   client_id=cls.NO_CLIENT_ID)
 
     @classmethod
     def create_unit_from(cls, fields):
@@ -200,6 +194,7 @@ class UnitForSale:
                    provider=fields[12] if len(fields) > 12 else cls.NO_PROVIDER,
                    provider_of_providers=fields[13] if len(fields) > 13 else cls.NO_PROVIDER_OF_PROVIDERS,
                    sales_type=fields[14] if len(fields) > 14 else cls.NO_SALES_TYPE,
+                   client_id=fields[15] if len(fields) > 15 else cls.NO_CLIENT_ID,
                    )
 
     @classmethod
@@ -317,6 +312,8 @@ class Pupi:
             unit_attr["proveedorProveedores"] = unit_for_sale.provider_of_providers()
         if unit_for_sale.has_sales_type():
             unit_attr["tipoVenta"] = unit_for_sale.sales_type()
+        if unit_for_sale.has_client_id():
+            unit_attr["idDeCliente"] = unit_for_sale.client_id()
         unit = ET.SubElement(parent_node, "unidad", **unit_attr)
         return unit
 

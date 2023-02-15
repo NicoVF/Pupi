@@ -7,11 +7,14 @@
 <body>
 <form action="/pupi/catalog/send" method="post">
     {% csrf_token %}
-    <label for="xml">XML a enviar: </label>
-    <textarea name="xml" id="xml" cols="30" rows="10">{{ xml }}</textarea>
-    <input type="text" name="token" value="{{token}}">
-    <input type="text" name="sucursal" value="{{sucursal}}">
-    <input type="text" name="client_name" value="{{client_name}}">
+    <label for="xml">XML a enviar: </label><br>
+    <textarea name="xml" id="xml" cols="180" rows="80">{{ xml }}</textarea><br>
+    <label for="token">TOKEN:</label>
+    <input id="token" type="text" name="token" value="{{token}}"><br>
+    <label for="sucursal">SUCURSAL:</label>
+    <input id="sucursal" type="text" name="sucursal" value="{{sucursal}}"><br>
+    <label for="client_name">CLIENT_NAME:</label>
+    <input id="client_name" type="text" name="client_name" value="{{client_name}}"><br>
     <input type="submit" value="OK">
 </form>
 

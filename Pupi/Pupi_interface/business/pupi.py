@@ -216,12 +216,19 @@ class UnitForSale:
 
 class Pupi:
 
+    def normalize_and_sort_csv(self, csv_to_normalize_and_sort):
+        normalized_csv = self.normalize_csv(csv_to_normalize_and_sort)
+        rows = csv.reader(normalized_csv.splitlines())
+        units_for_sale = [UnitForSale.create_unit_from(fields) for fields in rows]
+        sorted_units_for_sale = self._sort_units_for_sale(units_for_sale)
+        normalized_and_sorted_csv = self._render_to_csv(sorted_units_for_sale)
+        return normalized_and_sorted_csv
+
     def send_xml(self):
         raise NotImplementedError('Subclass responsibility')
 
     def convert_to_xml(self, a_csv):
-        normalized_csv = self.normalize_csv(a_csv)
-        rows = csv.reader(normalized_csv.splitlines())
+        rows = csv.reader(a_csv.splitlines())
         brands = ET.Element("marcas", xmlns='http://chat.soybot.com/catalogo/V1')
         previous_unit_for_sale = UnitForSale.no_unit_for_sale()
         units_for_sale = [UnitForSale.create_unit_from(fields) for fields in rows]
@@ -263,15 +270,15 @@ class Pupi:
         normalized_rows = []
         for fields in rows:
             normalized_fields = fields
-            normalized_fields[0] = self.capitalize_each_word(normalized_fields[0])
+            normalized_fields[0] = self._capitalize_each_word(normalized_fields[0])
             if len(fields) > 1:
-                normalized_fields[1] = self.capitalize_each_word(normalized_fields[1])
+                normalized_fields[1] = self._capitalize_each_word(normalized_fields[1])
             if len(fields) > 2:
-                normalized_fields[2] = self.capitalize_each_word(normalized_fields[2])
+                normalized_fields[2] = self._capitalize_each_word(normalized_fields[2])
             if len(fields) > 6:
                 normalized_fields[6] = normalized_fields[6].lower()
             if len(fields) > 9:
-                normalized_fields[9] = self.capitalize_each_word(normalized_fields[9])
+                normalized_fields[9] = self._capitalize_each_word(normalized_fields[9])
             if len(fields) > 10:
                 normalized_fields[10] = normalized_fields[10].replace(',', '.')
             if len(fields) > 11:
@@ -282,7 +289,7 @@ class Pupi:
         normalized_csv = "\n".join(sorted_joined_rows)
         return normalized_csv
 
-    def capitalize_each_word(self, string):
+    def _capitalize_each_word(self, string):
         return string.title()
 
     def _unit_data_exists(self, unit_for_sale):
@@ -391,4 +398,35 @@ class Pupi:
             if unit.has_price():
                 unit.price_to_str()
         return
+
+    def _render_to_csv(self, sorted_units_for_sale):
+        data_rows = []
+        for unit in sorted_units_for_sale:
+            unit_data = self._data_from(unit)
+            unit_data_as_strings = ["\"" + str(field) + "\"" for field in unit_data]
+            data_rows.append(unit_data_as_strings)
+        csv_rows = [",".join(quoted_data) for quoted_data in data_rows]
+        csv_string = "\n".join(csv_rows)
+        return csv_string
+
+    def _data_from(self, unit):
+        return [
+            unit.brand(),
+            unit.model(),
+            unit.version(),
+            unit.year(),
+            unit.price(),
+            unit.image_url(),
+            unit.id(),
+            unit.kilometers(),
+            unit.currency(),
+            unit.zone(),
+            unit.latitud(),
+            unit.longitud(),
+            unit.provider(),
+            unit.provider_of_providers(),
+            unit.sales_type(),
+            unit.client_id()
+        ]
+
 

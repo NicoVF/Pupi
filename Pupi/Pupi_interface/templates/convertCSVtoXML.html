@@ -7,8 +7,8 @@
 <body>
 <form action="/pupi/catalog/convert" method="post">
     {% csrf_token %}
-    <label for="csv">CSV a convertir: </label>
-    <textarea name="csv" id="csv" cols="30" rows="10">{{ csv }}</textarea>
+    <label for="csv">CSV a convertir: </label><br>
+    <textarea name="csv" id="csv" cols="180" rows="80">{{ csv }}</textarea><br>
     <input type="submit" value="Convert">
 </form>
 </body>

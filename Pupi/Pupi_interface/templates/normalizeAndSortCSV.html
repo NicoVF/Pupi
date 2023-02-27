@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Normalizar y ordenar</title>
+</head>
+<body>
+<form action="/pupi/catalog/normalizeAndSort" method="post">
+    {% csrf_token %}
+    <label for="csv">CSV a normalizar y ordenar: </label><br>
+    <textarea name="csv" id="csv" cols="200" rows="75">{{ csv }}</textarea><br>
+    <input type="submit" value="Normalizar y ordenar">
+</form>
+</body>
+</html>

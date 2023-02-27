@@ -60,7 +60,7 @@ class ConvertCSVView(generic.TemplateView):
         context = {
         }
         return render(request, self.template_name, context)
-
+    
     def post(self, request, *args, **kwargs):
         # obtengo parametros
         csv_to_convert = request.POST["csv"]
@@ -80,3 +80,26 @@ class ConvertCSVView(generic.TemplateView):
             'sucursal': ""
         }
         return render(request, 'templates/sendCatalog.html', context)
+
+
+class NormalizeAndSortCSVView(generic.TemplateView):
+    template_name = 'templates/normalizeAndSortCSV.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        # obtengo parametros
+        csv_to_normalize_and_sort = request.POST["csv"]
+
+        # ejecuto lo que tengo que ejecutar
+        pupi = RemotePupi()
+        normalized_and_sorted_csv = pupi.normalize_and_sort_csv(csv_to_normalize_and_sort)
+
+        # construir respuesta
+        context = {
+            'csv': normalized_and_sorted_csv,
+        }
+        return render(request, 'templates/convertCSVtoXML.html', context)

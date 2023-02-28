@@ -237,7 +237,7 @@ class Pupi:
 
             brand_node_must_be_inserted = current_unit_for_sale.brand() != previous_unit_for_sale.brand()
             if brand_node_must_be_inserted:
-                brand = ET.SubElement(brands, "marca", nombre=current_unit_for_sale.brand().capitalize(),
+                brand = ET.SubElement(brands, "marca", nombre=current_unit_for_sale.brand(),
                                       estado='activo')
 
             model_node_must_be_inserted = brand_node_must_be_inserted or current_unit_for_sale.model() !=\

@@ -217,7 +217,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
         self.assertEqual(expected_xml, created_xml)
 
     def example_csv_brand_audi(self):
-        return "audi"
+        return "Audi"
 
     def example_csv_with_two_same_brands(self):
         return "Audi\nAudi"
@@ -248,7 +248,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_brand_and_model_audi(self):
-        return "aUdi,a1"
+        return "Audi,A1"
 
     def example_xml_brand_and_model_audi(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
@@ -485,7 +485,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_brand_model_with_unit_latitud(self):
-        return "Audi,A1,,,,,,,,,\"-34,5951836\""
+        return "Audi,A1,,,,,,,,,\"-34.5951836\""
 
     def example_xml_brand_model_with_unit_latitud(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
@@ -499,7 +499,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_brand_model_with_unit_longitud(self):
-        return "Audi,A1,,,,,,,,,,\"-58,3745734\""
+        return "Audi,A1,,,,,,,,,,\"-58.3745734\""
 
     def example_xml_brand_model_with_unit_longitud(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
@@ -569,10 +569,9 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def csv_con_same_version_but_different_model_must_insert_anyway(self):
-        return """""nissan,March,1.6 SENSE PURE DRIVE,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"SAN LUIS, Av. del Fundador esq, Las voces del Chorrillero,","-33,2941809","-66,2956203",ExpoUsados,DeConcesionarias,Usado
-nissan,note,1.6 SENSE PURE DRIVE,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"PILAR, Las Camelias, 3190","-34,4383348","-58,7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
+        return """""Nissan,March,1.6 Sense Pure Drive,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,","-33.2941809","-66.2956203",ExpoUsados,DeConcesionarias,Usado
+Nissan,Note,1.6 Sense Pure Drive,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"Pilar, Las Camelias, 3190","-34.4383348","-58.7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
 """""
-
     def xml_correcto_para_same_version_but_different_model_must_insert_anyway(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\

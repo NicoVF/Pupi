@@ -275,6 +275,8 @@ class Pupi:
                 normalized_fields[1] = self._capitalize_each_word(normalized_fields[1])
             if len(fields) > 2:
                 normalized_fields[2] = self._capitalize_each_word(normalized_fields[2])
+            if len(fields) > 4 and fields[4] != "":
+                normalized_fields[16] = normalized_fields[4]
             if len(fields) > 6:
                 normalized_fields[6] = normalized_fields[6].lower()
             if len(fields) > 9:

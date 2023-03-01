@@ -399,9 +399,9 @@ class Pupi:
                 unit.price_to_str()
         return
 
-    def _render_to_csv(self, sorted_units_for_sale):
+    def _render_to_csv(self, units_for_sale):
         data_rows = []
-        for unit in sorted_units_for_sale:
+        for unit in units_for_sale:
             unit_data = self._data_from(unit)
             unit_data_as_strings = ["\"" + str(field) + "\"" for field in unit_data]
             data_rows.append(unit_data_as_strings)

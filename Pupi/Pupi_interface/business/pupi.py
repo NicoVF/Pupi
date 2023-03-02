@@ -294,16 +294,17 @@ class Pupi:
 
     def remove_non_digits(self, price_string):
         import locale
+        clean_price_string = price_string.replace("$", "")
         english_failed = False
         argentine_failed = False
         locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         try:
-            english_price = int(locale.atof(price_string))
+            english_price = int(locale.atof(clean_price_string))
         except ValueError:
             english_failed = True
         locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
         try:
-            argentine_price = int(locale.atof(price_string))
+            argentine_price = int(locale.atof(clean_price_string))
         except ValueError:
             argentine_failed = True
         if english_failed and not argentine_failed:
@@ -311,12 +312,12 @@ class Pupi:
         if argentine_failed and not english_failed:
             return english_price
         if argentine_failed and english_failed:
-            raise ValueError("No pudimos procesar el precio: " + price_string)
+            raise ValueError("No pudimos procesar el precio: " + clean_price_string)
         if not argentine_failed and not english_failed:
             if english_price == argentine_price:
                 return english_price
             else:
-                raise ValueError("No es claro en que formato esta el precio: " + price_string)
+                raise ValueError("No es claro en que formato esta el precio: " + clean_price_string)
         # return price_string.replace(".","").replace(",","")
 
     def _capitalize_each_word(self, string):

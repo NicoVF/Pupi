@@ -1,4 +1,5 @@
 import csv
+import re
 import xml.etree.ElementTree as ET
 from functools import cmp_to_key
 
@@ -277,6 +278,7 @@ class Pupi:
                 normalized_fields[2] = self._capitalize_each_word(normalized_fields[2])
             if len(fields) > 4 and fields[4] != "":
                 normalized_fields[4] = str(self.remove_non_digits(normalized_fields[4]))
+                self._ensure_list_has_at_least(list=normalized_fields, minimum_amount_of_elements=17)
                 normalized_fields[16] = normalized_fields[4]
             if len(fields) > 6:
                 normalized_fields[6] = normalized_fields[6].lower()
@@ -294,7 +296,7 @@ class Pupi:
 
     def remove_non_digits(self, price_string):
         import locale
-        clean_price_string = price_string.replace("$", "")
+        clean_price_string = re.sub(r"[aArR$uUsSdD]", "", price_string)
         english_failed = False
         argentine_failed = False
         locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
@@ -459,5 +461,9 @@ class Pupi:
             unit.sales_type(),
             unit.client_id()
         ]
+
+    def _ensure_list_has_at_least(self, list, minimum_amount_of_elements):
+        while len(list) < minimum_amount_of_elements:
+            list.append("")
 
 

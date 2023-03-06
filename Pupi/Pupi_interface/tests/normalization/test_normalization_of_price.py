@@ -2,6 +2,7 @@ import unittest
 
 from Pupi_interface.business.pupi import Pupi
 
+
 class PriceNormalizationTest(unittest.TestCase):
 
     def setUp(self):
@@ -16,6 +17,12 @@ class PriceNormalizationTest(unittest.TestCase):
 
     def test02_supply_normalized_price_if_absent(self):
         csv = self.example_csv_with_price_normalized_absent()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test02bis_normalized_price_if_absent_and_so_do_the_previous_column(self):
+        csv = self.example_csv_with_price_normalized_absent_and_so_do_the_previous_column()
         normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_price_normalized()
         self.assertEqual(expected_csv, normalized_csv)
@@ -74,11 +81,26 @@ class PriceNormalizationTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_price_normalized()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test10_when_price_contains_text(self):
+        csv = self.example_csv_with_price_with_symbols()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test11_when_price_contains_text_usa(self):
+        csv = self.example_csv_with_price_with_symbols_usa()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_price_normalized(self):
         return "Audi,A1,,,1500000,ARS,,,,,,,,,,,1500000"
 
     def example_csv_with_price_normalized_absent(self):
         return "Audi,A1,,,1500000,ARS,,,,,,,,,,,"
+
+    def example_csv_with_price_normalized_absent_and_so_do_the_previous_column(self):
+        return "Audi,A1,,,1500000,ARS,,,,,,,,,"
 
     def example_csv_with_price_with_dots(self):
         return "Audi,A1,,,1.500.000,ARS,,,,,,,,,,,"
@@ -99,7 +121,10 @@ class PriceNormalizationTest(unittest.TestCase):
         return "Audi,A1,,,$1500000,ARS,,,,,,,,,,,"
 
     def example_csv_with_price_with_symbols(self):
-        return "Audi,A1,,,AR$1500000,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,ARS$1500000 ars,ARS,,,,,,,,,,,"
+
+    def example_csv_with_price_with_symbols_usa(self):
+        return "Audi,A1,,,usd1500000USD$,ARS,,,,,,,,,,,"
 
     def example_csv_with_price_with_spaces(self):
         return "Audi,A1,,, 1500000 ,ARS,,,,,,,,,,,"

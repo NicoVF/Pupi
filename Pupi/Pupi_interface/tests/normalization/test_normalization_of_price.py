@@ -68,6 +68,12 @@ class PriceNormalizationTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_price_normalized()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test10_when_price_contains_space(self):
+        csv = self.example_csv_with_price_with_spaces()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized()
+        self.assertEqual(expected_csv, normalized_csv)
+
     def example_csv_with_price_normalized(self):
         return "Audi,A1,,,1500000,ARS,,,,,,,,,,,1500000"
 
@@ -94,6 +100,9 @@ class PriceNormalizationTest(unittest.TestCase):
 
     def example_csv_with_price_with_symbols(self):
         return "Audi,A1,,,AR$1500000,ARS,,,,,,,,,,,"
+
+    def example_csv_with_price_with_spaces(self):
+        return "Audi,A1,,, 1500000 ,ARS,,,,,,,,,,,"
 
     def example_csv_with_price_is_not_a_number(self):
         return "Audi,A1,,,todos los chistes de gallegos son anecdotas,ARS,,,,,,,,,,,"

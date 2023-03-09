@@ -217,6 +217,9 @@ class UnitForSale:
 
 class Pupi:
 
+    def __init__(self):
+        self._usd_in_ars = None
+
     def normalize_and_sort_csv(self, csv_to_normalize_and_sort):
         normalized_csv = self.normalize_csv(csv_to_normalize_and_sort)
         rows = csv.reader(normalized_csv.splitlines())
@@ -279,7 +282,7 @@ class Pupi:
             if len(fields) > 4 and fields[4] != "":
                 normalized_fields[4] = str(self.remove_non_digits(normalized_fields[4]))
                 self._ensure_list_has_at_least(list=normalized_fields, minimum_amount_of_elements=17)
-                normalized_fields[16] = normalized_fields[4]
+                normalized_fields[16] = str(self._price_in_common_currency(normalized_fields))
             if len(fields) > 6:
                 normalized_fields[6] = normalized_fields[6].lower()
             if len(fields) > 9:
@@ -293,6 +296,11 @@ class Pupi:
         sorted_joined_rows = [",".join(quoted_fields) for quoted_fields in normalized_rows]
         normalized_csv = "\n".join(sorted_joined_rows)
         return normalized_csv
+
+    def _price_in_common_currency(self, normalized_fields):
+        if normalized_fields[5] == "ARS":
+            return normalized_fields[4]
+        return UnitForSale.get_price(normalized_fields) * self._usd_in_ars
 
     def remove_non_digits(self, price_string):
         import locale
@@ -461,5 +469,8 @@ class Pupi:
     def _ensure_list_has_at_least(self, list, minimum_amount_of_elements):
         while len(list) < minimum_amount_of_elements:
             list.append("")
+
+    def set_usd_in_ars(self, dollar_price_in_ars):
+        self._usd_in_ars = dollar_price_in_ars
 
 

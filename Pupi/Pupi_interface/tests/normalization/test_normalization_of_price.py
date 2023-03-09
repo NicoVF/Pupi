@@ -1,6 +1,7 @@
 import unittest
 
 from Pupi_interface.business.pupi import Pupi
+from Pupi_interface.tests.normalization.test_normalization_to_common_currency import NormalizationToCommonCurrencyTest
 
 
 class PriceNormalizationTest(unittest.TestCase):
@@ -143,4 +144,5 @@ class PriceNormalizationTest(unittest.TestCase):
 
     def example_normalized_csv_with_price_normalized_ambiguous(self):
         return """"Audi","A1","","","10500","ARS","","","","","","","","","","","10500\""""
+
 

@@ -28,6 +28,15 @@ class NormalizationToCommonCurrencyTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_another_price_normalized_in_common_currency()
         self.assertEqual(expected_csv, normalized_csv)
 
+    def test04_a_price_in_an_unsupported_currency_throws_an_error(self):
+        csv = self.example_csv_with_price_in_an_unsupported_currency_throws_an_error()
+        error_message = ""
+        try:
+            self.pupi.normalize_csv(csv)
+        except ValueError as error:
+            error_message = str(error)
+        self.assertEqual("Unrecognized currency: ABC", error_message)
+
     def example_csv_with_price_in_common_currency(self):
         return "Audi,A1,,,1500000,ARS,,,,,,,,,,,"
 
@@ -45,5 +54,10 @@ class NormalizationToCommonCurrencyTest(unittest.TestCase):
 
     def example_normalized_csv_with_another_price_normalized_in_common_currency(self):
         return """"Audi","A1","","","20000","USD","","","","","","","","","","","8000000\""""
+
+    def example_csv_with_price_in_an_unsupported_currency_throws_an_error(self):
+        return "Audi,A1,,,1500000,ABC,,,,,,,,,,,"
+
+
 
 

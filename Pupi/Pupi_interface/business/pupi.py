@@ -300,7 +300,9 @@ class Pupi:
     def _price_in_common_currency(self, normalized_fields):
         if normalized_fields[5] == "ARS":
             return normalized_fields[4]
-        return UnitForSale.get_price(normalized_fields) * self._usd_in_ars
+        if normalized_fields[5] == "USD":
+            return UnitForSale.get_price(normalized_fields) * self._usd_in_ars
+        raise ValueError(f"Unrecognized currency: {normalized_fields[5]}")
 
     def remove_non_digits(self, price_string):
         import locale

@@ -302,12 +302,12 @@ class Pupi:
         locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         try:
             english_price = int(locale.atof(clean_price_string))
-        except ValueError:
+        except ValueError as error:
             english_failed = True
         locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
         try:
             argentine_price = int(locale.atof(clean_price_string))
-        except ValueError:
+        except ValueError as error:
             argentine_failed = True
         if english_failed and not argentine_failed:
             return argentine_price
@@ -319,7 +319,9 @@ class Pupi:
             if english_price == argentine_price:
                 return english_price
             else:
-                raise ValueError("No es claro en que formato esta el precio: " + clean_price_string)
+                effective_price = max(english_price, argentine_price)
+                return effective_price
+                # raise ValueError("No es claro en que formato esta el precio: " + clean_price_string)
         # return price_string.replace(".","").replace(",","")
 
     def _capitalize_each_word(self, string):
@@ -377,12 +379,6 @@ class Pupi:
         unit_for_sale = self.row_to_unit(row)
         xml_element = self.unit_to_xml(unit_for_sale)
         formatted_xml_element = self.format_xml(xml_element)
-
-    def _practica(self):
-        row = ""
-        unit_for_sale = self.row_to_unit(row)
-        formatted_unit = self.format_unit(unit_for_sale)
-        xml_element = self.unit_to_xml(formatted_unit)
 
     def _sort_units_for_sale(self, units_for_sale):
         def compare_units_for_sale(unit1, unit2):

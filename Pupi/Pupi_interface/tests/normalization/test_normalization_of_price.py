@@ -51,16 +51,7 @@ class PriceNormalizationTest(unittest.TestCase):
         expected_csv = self.example_normalized_csv_with_price_normalized()
         self.assertEqual(expected_csv, normalized_csv)
 
-    def test07_when_price_is_ambiguous_normalization_fails(self):
-        csv = self.example_csv_with_ambiguous_price()
-        normalization_failed = False
-        try:
-            self.pupi.normalize_csv(csv)
-        except ValueError:
-            normalization_failed = True
-        self.assertTrue(normalization_failed)
-
-    def test08_when_price_is_not_a_number_normalization_fails(self):
+    def test07_when_price_is_not_a_number_normalization_fails(self):
         csv = self.example_csv_with_price_is_not_a_number()
         normalization_failed = False
         try:
@@ -69,13 +60,13 @@ class PriceNormalizationTest(unittest.TestCase):
             normalization_failed = True
         self.assertTrue(normalization_failed)
 
-    def test09_when_price_is_contains_money_symbol(self):
+    def test08_when_price_is_contains_money_symbol(self):
         csv = self.example_csv_with_price_with_money_symbol()
         normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_price_normalized()
         self.assertEqual(expected_csv, normalized_csv)
 
-    def test10_when_price_contains_space(self):
+    def test9_when_price_contains_space(self):
         csv = self.example_csv_with_price_with_spaces()
         normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_price_normalized()
@@ -91,6 +82,18 @@ class PriceNormalizationTest(unittest.TestCase):
         csv = self.example_csv_with_price_with_symbols_usa()
         normalized_csv = self.pupi.normalize_csv(csv)
         expected_csv = self.example_normalized_csv_with_price_normalized()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test12_when_price_is_ambiguous_english(self):
+        csv = self.example_csv_with_ambiguous_english_price()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized_ambiguous()
+        self.assertEqual(expected_csv, normalized_csv)
+
+    def test13_when_price_is_ambiguous_argentine(self):
+        csv = self.example_csv_with_ambiguous_argentine_price()
+        normalized_csv = self.pupi.normalize_csv(csv)
+        expected_csv = self.example_normalized_csv_with_price_normalized_ambiguous()
         self.assertEqual(expected_csv, normalized_csv)
 
     def example_csv_with_price_normalized(self):
@@ -114,9 +117,6 @@ class PriceNormalizationTest(unittest.TestCase):
     def example_csv_with_price_with_cents_in_arg(self):
         return "Audi,A1,,,\"1,500,000.00\",ARS,,,,,,,,,,,"
 
-    def example_csv_with_ambiguous_price(self):
-        return "Audi,A1,,,\"1,500\",ARS,,,,,,,,,,,"
-
     def example_csv_with_price_with_money_symbol(self):
         return "Audi,A1,,,$1500000,ARS,,,,,,,,,,,"
 
@@ -129,12 +129,18 @@ class PriceNormalizationTest(unittest.TestCase):
     def example_csv_with_price_with_spaces(self):
         return "Audi,A1,,, 1500000 ,ARS,,,,,,,,,,,"
 
+    def example_csv_with_ambiguous_english_price(self):
+        return "Audi,A1,,,\"10,500\",ARS,,,,,,,,,,,"
+
+    def example_csv_with_ambiguous_argentine_price(self):
+        return "Audi,A1,,,\"10.500\",ARS,,,,,,,,,,,"
+
     def example_csv_with_price_is_not_a_number(self):
         return "Audi,A1,,,todos los chistes de gallegos son anecdotas,ARS,,,,,,,,,,,"
 
     def example_normalized_csv_with_price_normalized(self):
         return """"Audi","A1","","","1500000","ARS","","","","","","","","","","","1500000\""""
 
-
-
+    def example_normalized_csv_with_price_normalized_ambiguous(self):
+        return """"Audi","A1","","","10500","ARS","","","","","","","","","","","10500\""""
 

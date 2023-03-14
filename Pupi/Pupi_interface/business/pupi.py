@@ -482,7 +482,8 @@ class Pupi:
             unit.provider(),
             unit.provider_of_providers(),
             unit.sales_type(),
-            unit.client_id()
+            unit.client_id(),
+            unit.normalized_price()
         ]
 
     def _ensure_list_has_at_least(self, list, minimum_amount_of_elements):

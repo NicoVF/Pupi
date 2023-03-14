@@ -9,18 +9,23 @@ class UnitForSaleEqualityAndOrderTest(unittest.TestCase):
         super().__init__(methodName)
 
     def setUp(self):
+        super(UnitForSaleEqualityAndOrderTest, self).setUp()
         self.unit_audi = UnitForSale.create_unit_from(["Audi"])
         self.unit_audi_A1 = UnitForSale.create_unit_from(["Audi", "A1"])
         self.unit_audi_A3 = UnitForSale.create_unit_from(["Audi", "A3"])
         self.unit_fiat = UnitForSale.create_unit_from(["Fiat"])
         self.unit_fiat_palio_nafta = UnitForSale.create_unit_from(["Fiat", "Palio", "Nafta"])
         self.unit_fiat_palio_gnc = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC"])
-        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "150"])
-        self.unit_fiat_palio_gnc_precio1000 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "1000"])
-        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "250"])
+        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "150", "ARS", "", "", "", "", "", "", "", "", "", "", "150"])
+        self.unit_fiat_palio_gnc_precio120_usd = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "120", "USD", "", "", "", "", "", "", "", "", "", "", "48000"])
+        self.unit_fiat_palio_gnc_precio1000 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "1000", "ARS", "", "", "", "", "", "", "", "", "", "", "1000"])
+        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "250", "ARS", "", "", "", "", "", "", "", "", "", "", "250"])
         self.unit_fiat_palio_gnc_anio2015 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2015"])
         self.unit_fiat_palio_gnc_anio2018 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2018"])
-        super(UnitForSaleEqualityAndOrderTest, self).setUp()
         self.pupi = Pupi()
 
     def test01_same_units_with_brand(self):
@@ -70,5 +75,11 @@ class UnitForSaleEqualityAndOrderTest(unittest.TestCase):
 
     def test16_first_unit_great_than_second_unit_with_year(self):
         self.assertGreater(self.unit_fiat_palio_gnc_anio2018, self.unit_fiat_palio_gnc_anio2015)
+
     def test17_lexicographic_order_of_price_doesnt_matter(self):
         self.assertLess(self.unit_fiat_palio_gnc_precio250, self.unit_fiat_palio_gnc_precio1000)
+
+    def test18_same_price_is_greater_in_usd_than_ars(self):
+        self.assertGreater(self.unit_fiat_palio_gnc_precio120_usd, self.unit_fiat_palio_gnc_precio150)
+
+

@@ -21,9 +21,10 @@ class UnitForSale:
     NO_PROVIDER_OF_PROVIDERS = ""
     NO_SALES_TYPE = ""
     NO_CLIENT_ID = ""
+    NO_NORMALIZED_PRICE = None
 
     def __init__(self, brand, model, version, year, price, image, id, kilometers, currency, zone, latitud, longitud,
-                 provider, provider_of_providers, sales_type, client_id):
+                 provider, provider_of_providers, sales_type, client_id, normalized_price):
         self._brand = brand
         self._model = model
         self._version = version
@@ -40,6 +41,7 @@ class UnitForSale:
         self._provider_of_providers = provider_of_providers
         self._sales_type = sales_type
         self._client_id = client_id
+        self._normalized_price = normalized_price
 
     def __eq__(self, other):
         return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price() and self.year() == other.year()
@@ -63,9 +65,9 @@ class UnitForSale:
             return True
         if self.year() > other.year():
             return False
-        if self.price() < other.price():
+        if self.normalized_price() < other.normalized_price():
             return True
-        if self.price() > other.price():
+        if self.normalized_price() > other.normalized_price():
             return False
 
     def compare_to(self, other):
@@ -168,7 +170,8 @@ class UnitForSale:
     def has_client_id(self):
         return self._client_id is not self.NO_CLIENT_ID
 
-
+    def normalized_price(self):
+        return self._normalized_price
 
     @classmethod
     def no_unit_for_sale(cls):
@@ -176,10 +179,15 @@ class UnitForSale:
                    image=cls.NO_IMAGE, id=cls.NO_ID, kilometers=cls.NO_KILOMETERS, currency=cls.NO_CURRENCY,
                    zone=cls.NO_ZONE, latitud=cls.NO_LATITUD, longitud=cls.NO_LONGITUD, provider=cls.NO_PROVIDER,
                    provider_of_providers=cls.NO_PROVIDER_OF_PROVIDERS, sales_type=cls.NO_SALES_TYPE,
-                   client_id=cls.NO_CLIENT_ID)
+                   client_id=cls.NO_CLIENT_ID, normalized_price=cls.NO_NORMALIZED_PRICE)
 
     @classmethod
     def create_unit_from(cls, fields):
+        if len(fields) == 0:
+            raise ValueError("La marca es obligatoria como primer campo")
+        if cls.get_price(fields) != cls.NO_PRICE and cls.get_normalized_price(fields) == cls.NO_NORMALIZED_PRICE:
+            raise ValueError("Esta definido el precio nominal, pero no el normalizado. Definir precio normalizado o"
+                             " eliminar el precio nominal")
         return cls(brand=fields[0],
                    model=fields[1] if len(fields) > 1 else cls.NO_MODEL,
                    version=fields[2] if len(fields) > 2 and fields[2] != "" else cls.NO_VERSION,
@@ -196,6 +204,7 @@ class UnitForSale:
                    provider_of_providers=fields[13] if len(fields) > 13 else cls.NO_PROVIDER_OF_PROVIDERS,
                    sales_type=fields[14] if len(fields) > 14 else cls.NO_SALES_TYPE,
                    client_id=fields[15] if len(fields) > 15 else cls.NO_CLIENT_ID,
+                   normalized_price=cls.get_normalized_price(fields),
                    )
 
     @classmethod
@@ -213,6 +222,14 @@ class UnitForSale:
         if not fields[4].isdigit():
             return cls.NO_PRICE
         return int(fields[4])
+
+    @classmethod
+    def get_normalized_price(cls, fields):
+        if len(fields) < 17:
+            return cls.NO_NORMALIZED_PRICE
+        if not fields[16].isdigit():
+            return cls.NO_NORMALIZED_PRICE
+        return int(fields[16])
 
 
 class Pupi:

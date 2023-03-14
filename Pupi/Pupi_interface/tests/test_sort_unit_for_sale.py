@@ -9,24 +9,33 @@ class PupiSortUnitForSaleTest(unittest.TestCase):
         super().__init__(methodName)
 
     def setUp(self):
+        super(PupiSortUnitForSaleTest, self).setUp()
         self.unit_audi = UnitForSale.create_unit_from(["Audi"])
         self.unit_audi_A1 = UnitForSale.create_unit_from(["Audi", "A1"])
         self.unit_audi_A3 = UnitForSale.create_unit_from(["Audi", "A3"])
         self.unit_fiat = UnitForSale.create_unit_from(["Fiat"])
         self.unit_fiat_palio_nafta = UnitForSale.create_unit_from(["Fiat", "Palio", "Nafta"])
         self.unit_fiat_palio_gnc = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC"])
-        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "150"])
-        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "250"])
-        self.unit_fiat_palio_gnc_precio350 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "", "350"])
+        self.unit_fiat_palio_gnc_precio150 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "150", "ARS", "", "", "", "", "", "", "", "", "", "", "150"])
+        self.unit_fiat_palio_gnc_precio250 = UnitForSale.create_unit_from(
+        ["Fiat", "Palio", "GNC", "", "250", "ARS", "", "", "", "", "", "", "", "", "", "", "250"])
+        self.unit_fiat_palio_gnc_precio350 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "", "350", "ARS", "", "", "", "", "", "", "", "", "", "", "350"])
         self.unit_fiat_palio_gnc_anio2015 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2015"])
         self.unit_fiat_palio_gnc_anio2018 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2018"])
-        self.unit_fiat_palio_gnc_anio2015_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2015", "150"])
-        self.unit_fiat_palio_gnc_anio2015_precio350 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2015", "350"])
-        self.unit_fiat_palio_gnc_anio2018_precio150 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2018", "150"])
-        self.unit_fiat_palio_gnc_anio2018_precio250 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2018", "250"])
-        self.unit_fiat_palio_gnc_anio2018_precio250_2 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2018", "250"])
-        self.unit_fiat_palio_gnc_anio2017_precio750 = UnitForSale.create_unit_from(["Fiat", "Palio", "GNC", "2017", "750"])
-        super(PupiSortUnitForSaleTest, self).setUp()
+        self.unit_fiat_palio_gnc_anio2015_precio150 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2015", "150", "ARS", "", "", "", "", "", "", "", "", "", "", "150"])
+        self.unit_fiat_palio_gnc_anio2015_precio350 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2015", "350", "ARS", "", "", "", "", "", "", "", "", "", "", "350"])
+        self.unit_fiat_palio_gnc_anio2018_precio150 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2018", "150", "ARS", "", "", "", "", "", "", "", "", "", "", "150"])
+        self.unit_fiat_palio_gnc_anio2018_precio250 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2018", "250", "ARS", "", "", "", "", "", "", "", "", "", "", "250"])
+        self.unit_fiat_palio_gnc_anio2018_precio250_2 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2018", "250", "ARS", "", "", "", "", "", "", "", "", "", "", "250"])
+        self.unit_fiat_palio_gnc_anio2017_precio750 = UnitForSale.create_unit_from(
+            ["Fiat", "Palio", "GNC", "2017", "750", "ARS", "", "", "", "", "", "", "", "", "", "", "750"])
         self.pupi = Pupi()
 
     def test01_sorts_brands(self):

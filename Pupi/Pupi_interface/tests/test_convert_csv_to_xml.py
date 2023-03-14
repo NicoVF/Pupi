@@ -392,7 +392,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def example_csv_with_brand_model_with_unit_price(self):
-        return "Audi,A1,,,1500000,,"
+        return "Audi,A1,,,1500000,,,,,,,,,,,,1500000"
 
     def example_xml_brand_model_with_unit_price(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\
@@ -517,8 +517,8 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 "
 
     def csv_con_same_version_but_different_model_must_insert_anyway(self):
-        return """""Nissan,March,1.6 Sense Pure Drive,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,","-33.2941809","-66.2956203",ExpoUsados,DeConcesionarias,Usado
-Nissan,Note,1.6 Sense Pure Drive,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"Pilar, Las Camelias, 3190","-34.4383348","-58.7918752",Autonorte Pilar S.A,DeConcesionarias,Usado
+        return """""Nissan,March,1.6 Sense Pure Drive,2018,3100000,https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg,3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5,65000,ARS,"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,","-33.2941809","-66.2956203",ExpoUsados,DeConcesionarias,Usado,,3100000
+Nissan,Note,1.6 Sense Pure Drive,2018,4290000,https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg,7fd4db2a-eb99-46d8-8ac3-01dcd66dd436,70000,ARS,"Pilar, Las Camelias, 3190","-34.4383348","-58.7918752",Autonorte Pilar S.A,DeConcesionarias,Usado,,4290000
 """""
     def xml_correcto_para_same_version_but_different_model_must_insert_anyway(self):
         return "<?xml version='1.0' encoding='utf-8'?>\n\

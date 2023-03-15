@@ -323,6 +323,11 @@ class Pupi:
             return UnitForSale.get_price(normalized_fields) * self.usd_in_ars()
         raise ValueError(f"Unrecognized currency: {currency}")
 
+    def usd_in_ars(self):
+        if self._usd_in_ars is None:
+            raise ValueError(f"La cotizacion del dolar no esta definida")
+        return self._usd_in_ars
+
     def remove_non_digits(self, price_string):
         import locale
         clean_price_string = re.sub(r"[aArR$uUsSdD]", "", price_string)

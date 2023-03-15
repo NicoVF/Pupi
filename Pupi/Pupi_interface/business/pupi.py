@@ -235,7 +235,7 @@ class UnitForSale:
 class Pupi:
 
     def __init__(self):
-        self._usd_in_ars = None
+        self._usd_in_ars = 400
 
     def normalize_and_sort_csv(self, csv_to_normalize_and_sort):
         normalized_csv = self.normalize_csv(csv_to_normalize_and_sort)
@@ -315,11 +315,13 @@ class Pupi:
         return normalized_csv
 
     def _price_in_common_currency(self, normalized_fields):
-        if normalized_fields[5] == "ARS":
+        valid_dolar_currencies = ["USD", "U$S"]
+        currency = normalized_fields[8]
+        if currency == "ARS":
             return normalized_fields[4]
-        if normalized_fields[5] == "USD":
-            return UnitForSale.get_price(normalized_fields) * self._usd_in_ars
-        raise ValueError(f"Unrecognized currency: {normalized_fields[5]}")
+        if currency in valid_dolar_currencies:
+            return UnitForSale.get_price(normalized_fields) * self.usd_in_ars()
+        raise ValueError(f"Unrecognized currency: {currency}")
 
     def remove_non_digits(self, price_string):
         import locale

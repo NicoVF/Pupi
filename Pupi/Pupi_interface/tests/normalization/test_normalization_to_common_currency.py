@@ -38,25 +38,25 @@ class NormalizationToCommonCurrencyTest(unittest.TestCase):
         self.assertEqual("Unrecognized currency: ABC", error_message)
 
     def example_csv_with_price_in_common_currency(self):
-        return "Audi,A1,,,1500000,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,1500000,,,,ARS,,,,,,,,"
 
     def example_normalized_csv_with_price_in_common_currency(self):
-        return """"Audi","A1","","","1500000","ARS","","","","","","","","","","","1500000\""""
+        return """"Audi","A1","","","1500000","","","","ARS","","","","","","","","1500000\""""
 
     def example_csv_with_price_in_usd(self):
-        return "Audi,A1,,,10000,USD,,,,,,,,,,,"
+        return "Audi,A1,,,10000,,,,USD,,,,,,,,"
 
     def example_normalized_csv_with_price_normalized_in_common_currency(self):
-        return """"Audi","A1","","","10000","USD","","","","","","","","","","","4000000\""""
+        return """"Audi","A1","","","10000","","","","USD","","","","","","","","4000000\""""
 
     def example_csv_with_another_price_in_usd(self):
-        return "Audi,A1,,,20000,USD,,,,,,,,,,,"
+        return "Audi,A1,,,20000,,,,USD,,,,,,,,"
 
     def example_normalized_csv_with_another_price_normalized_in_common_currency(self):
-        return """"Audi","A1","","","20000","USD","","","","","","","","","","","8000000\""""
+        return """"Audi","A1","","","20000","","","","USD","","","","","","","","8000000\""""
 
     def example_csv_with_price_in_an_unsupported_currency_throws_an_error(self):
-        return "Audi,A1,,,1500000,ABC,,,,,,,,,,,"
+        return "Audi,A1,,,1500000,,,,ABC,,,,,,,,"
 
 
 

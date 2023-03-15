@@ -98,51 +98,51 @@ class PriceNormalizationTest(unittest.TestCase):
         self.assertEqual(expected_csv, normalized_csv)
 
     def example_csv_with_price_normalized(self):
-        return "Audi,A1,,,1500000,ARS,,,,,,,,,,,1500000"
+        return "Audi,A1,,,1500000,,,,ARS,,,,,,,,1500000"
 
     def example_csv_with_price_normalized_absent(self):
-        return "Audi,A1,,,1500000,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,1500000,,,,ARS,,,,,,,,"
 
     def example_csv_with_price_normalized_absent_and_so_do_the_previous_column(self):
-        return "Audi,A1,,,1500000,ARS,,,,,,,,,"
+        return "Audi,A1,,,1500000,,,,ARS,,,,,,"
 
     def example_csv_with_price_with_dots(self):
-        return "Audi,A1,,,1.500.000,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,1.500.000,,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_commas(self):
-        return "Audi,A1,,,\"1,500,000\",ARS,,,,,,,,,,,"
+        return "Audi,A1,,,\"1,500,000\",,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_cents_in_english(self):
-        return "Audi,A1,,,\"1,500,000.00\",ARS,,,,,,,,,,,"
+        return "Audi,A1,,,\"1,500,000.00\",,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_cents_in_arg(self):
-        return "Audi,A1,,,\"1,500,000.00\",ARS,,,,,,,,,,,"
+        return "Audi,A1,,,\"1,500,000.00\",,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_money_symbol(self):
-        return "Audi,A1,,,$1500000,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,$1500000,,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_symbols(self):
-        return "Audi,A1,,,ARS$1500000 ars,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,ARS$1500000 ars,,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_symbols_usa(self):
-        return "Audi,A1,,,usd1500000USD$,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,usd1500000USD$,,,,ARS,,,,,,,,"
 
     def example_csv_with_price_with_spaces(self):
-        return "Audi,A1,,, 1500000 ,ARS,,,,,,,,,,,"
+        return "Audi,A1,,, 1500000 ,,,,ARS,,,,,,,,"
 
     def example_csv_with_ambiguous_english_price(self):
-        return "Audi,A1,,,\"10,500\",ARS,,,,,,,,,,,"
+        return "Audi,A1,,,\"10,500\",,,,ARS,,,,,,,,"
 
     def example_csv_with_ambiguous_argentine_price(self):
-        return "Audi,A1,,,\"10.500\",ARS,,,,,,,,,,,"
+        return "Audi,A1,,,\"10.500\",,,,ARS,,,,,,,,"
 
     def example_csv_with_price_is_not_a_number(self):
-        return "Audi,A1,,,todos los chistes de gallegos son anecdotas,ARS,,,,,,,,,,,"
+        return "Audi,A1,,,todos los chistes de gallegos son anecdotas,,,,ARS,,,,,,,,"
 
     def example_normalized_csv_with_price_normalized(self):
-        return """"Audi","A1","","","1500000","ARS","","","","","","","","","","","1500000\""""
+        return """"Audi","A1","","","1500000","","","","ARS","","","","","","","","1500000\""""
 
     def example_normalized_csv_with_price_normalized_ambiguous(self):
-        return """"Audi","A1","","","10500","ARS","","","","","","","","","","","10500\""""
+        return """"Audi","A1","","","10500","","","","ARS","","","","","","","","10500\""""
 
 

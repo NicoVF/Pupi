@@ -93,13 +93,20 @@ class NormalizeAndSortCSVView(generic.TemplateView):
     def post(self, request, *args, **kwargs):
         # obtengo parametros
         csv_to_normalize_and_sort = request.POST["csv"]
+        cotizacion_dolar_string = request.POST["cotizacion_dolar"]
+        try:
+            cotizacion_dolar_int = int(cotizacion_dolar_string)
+        except:
+            raise ValueError(f"Ingrese un valor numerico para la cotizacion del dolar")
 
         # ejecuto lo que tengo que ejecutar
         pupi = RemotePupi()
+        pupi.set_usd_in_ars(cotizacion_dolar_int)
         normalized_and_sorted_csv = pupi.normalize_and_sort_csv(csv_to_normalize_and_sort)
 
         # construir respuesta
         context = {
             'csv': normalized_and_sorted_csv,
+            'cotizacion_dolar': cotizacion_dolar_string
         }
         return render(request, 'templates/convertCSVtoXML.html', context)

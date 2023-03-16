@@ -7,6 +7,8 @@
 <body>
 <form action="/pupi/catalog/normalizeAndSort" method="post">
     {% csrf_token %}
+    <label for="cotizacion_dolar">Cotización del Dólar a utilizar</label>
+    <input type="text" name="cotizacion_dolar">{{ cotizacion_dolar }}<br>
     <label for="csv">CSV a normalizar y ordenar: </label><br>
     <textarea name="csv" id="csv" cols="200" rows="75">{{ csv }}</textarea><br>
     <input type="submit" value="Normalizar y ordenar">

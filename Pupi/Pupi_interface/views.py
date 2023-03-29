@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 
+from Pupi_interface.api_calls.dollar_value import DollarValue
 from Pupi_interface.business import Result, Cliente
 from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
@@ -86,7 +87,9 @@ class NormalizeAndSortCSVView(generic.TemplateView):
     template_name = 'templates/normalizeAndSortCSV.html'
 
     def get(self, request, *args, **kwargs):
+        valor_dolar = DollarValue().dollar_value()
         context = {
+            'cotizacion_dolar': valor_dolar
         }
         return render(request, self.template_name, context)
 

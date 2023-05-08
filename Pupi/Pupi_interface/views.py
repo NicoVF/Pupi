@@ -1,10 +1,14 @@
+import os
+
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views import View
 from django.views import generic
 
 from Pupi_interface.api_calls.dollar_value import DollarValue
 from Pupi_interface.business import Result, Cliente
-from Pupi_interface.business.simulated_pupi import SimulatedPupi
 from Pupi_interface.business.remote_pupi import RemotePupi
+from Pupi_interface.business.localization.unitsThroughLocalization import UnitsManager
 
 
 # Create your views here.
@@ -61,7 +65,7 @@ class ConvertCSVView(generic.TemplateView):
         context = {
         }
         return render(request, self.template_name, context)
-    
+
     def post(self, request, *args, **kwargs):
         # obtengo parametros
         csv_to_convert = request.POST["csv"]
@@ -113,3 +117,61 @@ class NormalizeAndSortCSVView(generic.TemplateView):
             'cotizacion_dolar': cotizacion_dolar_string
         }
         return render(request, 'templates/convertCSVtoXML.html', context)
+
+
+class GetUnitsWithLocalizationArguments(View):
+
+    def get(self, request):
+
+        token = request.GET.get("token")
+        if token != os.environ['TOKEN_API_UNITS_THROUGH_LOCALIZATION']:
+            return JsonResponse(
+                {
+                    "message": "ERROR - Acceso denegado"
+                })
+
+        marca = request.GET.get("marca")
+        if not marca:
+            return JsonResponse(
+                {
+                    "message": "ERROR - Se necesita un valor para el parametro marca"
+                })
+
+        modelo = request.GET.get("modelo")
+        if not modelo:
+            return JsonResponse(
+                {
+                    "message": "ERROR - Se necesita un valor para el parametro modelo"
+                })
+
+        try:
+            anio = int(request.GET.get("anio"))
+        except TypeError:
+            anio = None
+
+        try:
+            max_cant = int(request.GET.get("cantidad_max"))
+        except TypeError:
+            max_cant = None
+
+        ip = request.GET.get("ip")
+
+        lat1 = -34.5247293
+        long1 = -58.4727029
+
+        admin_de_unidades = UnitsManager()
+        unidades_filtradas, cantidad_unidades_filtradas = admin_de_unidades\
+            .filter(brand=marca, model=modelo, lat1=lat1, long1=long1, year=anio, max_amount=max_cant)
+        unidades_filtradas_json = admin_de_unidades.gen_json(unidades_filtradas)
+
+
+        datos = \
+            {
+                "message": "OK",
+                "ip": ip,
+                "marca": marca,
+                "modelo": modelo,
+                "Cantunidades": cantidad_unidades_filtradas,
+                "unidades": unidades_filtradas_json
+            }
+        return JsonResponse(datos)

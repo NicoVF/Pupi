@@ -123,55 +123,68 @@ class GetUnitsWithLocalizationArguments(View):
 
     def get(self, request):
 
-        token = request.GET.get("token")
-        if token != os.environ['TOKEN_API_UNITS_THROUGH_LOCALIZATION']:
+        if not self._get_token(request):
             return JsonResponse(
                 {
                     "message": "ERROR - Acceso denegado"
                 })
 
-        marca = request.GET.get("marca")
-        if not marca:
+        brand = self._get_brand(request)
+        if not brand:
             return JsonResponse(
                 {
                     "message": "ERROR - Se necesita un valor para el parametro marca"
                 })
 
-        modelo = request.GET.get("modelo")
-        if not modelo:
+        model = self._get_model(request)
+        if not model:
             return JsonResponse(
                 {
                     "message": "ERROR - Se necesita un valor para el parametro modelo"
                 })
 
-        try:
-            anio = int(request.GET.get("anio"))
-        except TypeError:
-            anio = None
-
-        try:
-            max_cant = int(request.GET.get("cantidad_max"))
-        except TypeError:
-            max_cant = None
-
+        year = self._get_year(request)
+        max_cant = self._get_max_amount(request)
         ip = request.GET.get("ip")
 
         lat1 = -34.5247293
         long1 = -58.4727029
 
-        admin_de_unidades = UnitsManager()
-        unidades_filtradas, cantidad_unidades_filtradas = admin_de_unidades\
-            .filter(brand=marca, model=modelo, lat1=lat1, long1=long1, year=anio, max_amount=max_cant)
-        unidades_filtradas_json = admin_de_unidades.gen_json(unidades_filtradas)
+        units_manager = UnitsManager()
+        filtered_units, amount_filtered_units = units_manager\
+            .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year, max_amount=max_cant)
+        filtered_units_json = units_manager.gen_json(filtered_units)
 
-
-        datos = \
+        info = \
             {
-                "message": "OK",
-                "ip": ip,
-                "marca": marca,
-                "modelo": modelo,
-                "Cantunidades": cantidad_unidades_filtradas,
-                "unidades": unidades_filtradas_json
+                "Mensaje": "OK",
+                "IP": ip,
+                "Marca": brand,
+                "Modelo": model,
+                "Cantidad de unidades": amount_filtered_units,
+                "Unidades": filtered_units_json
             }
-        return JsonResponse(datos)
+        return JsonResponse(info)
+
+    def _get_model(self, request):
+        return request.GET.get("modelo")
+
+    def _get_brand(self, request):
+        return request.GET.get("marca")
+
+    def _get_max_amount(self, request):
+        try:
+            max_cant = int(request.GET.get("cantidad_max"))
+        except TypeError:
+            max_cant = None
+        return max_cant
+
+    def _get_year(self, request):
+        try:
+            anio = int(request.GET.get("anio"))
+        except TypeError:
+            anio = None
+        return anio
+
+    def _get_token(self, request):
+        return request.GET.get("token") == os.environ['TOKEN_API_UNITS_THROUGH_LOCALIZATION']

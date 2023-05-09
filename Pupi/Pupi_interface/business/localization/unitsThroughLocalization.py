@@ -153,26 +153,22 @@ class UnitsManager:
         units.update({f"unidad{i}": json_unit})
 
     def _set_values_in(self, json_unit, unit):
-        json_unit["version"] = unit.version()
-        json_unit["anio"] = unit.year()
-        json_unit["precio"] = unit.price()
-        json_unit["tipo-cambio"] = unit.currency()
-        json_unit["kilometraje"] = unit.kilometers()
-        json_unit["foto-agencia"] = unit.image()
-        json_unit["id"] = unit.id()
+        json_unit["Version"] = unit.version()
+        json_unit["Anio"] = unit.year()
+        json_unit["Precio"] = unit.price()
+        json_unit["Tipo_cambio"] = unit.currency()
+        json_unit["Kilometraje"] = unit.kilometers()
+        json_unit["Foto_agencia"] = unit.image()
+        json_unit["ID"] = unit.id()
 
     def _get_json_unit_template(self):
         unit_template = {
-            "version": None,
-            "anio": None,
-            "precio": None,
-            "tipo-cambio": None,
-            "kilometraje": None,
-            "foto-agencia": None,
-            "id": None,
+            "Version": None,
+            "Anio": None,
+            "Precio": None,
+            "Tipo_cambio": None,
+            "Kilometraje": None,
+            "Foto_agencia": None,
+            "ID": None,
         }
         return unit_template
-
-
-
-

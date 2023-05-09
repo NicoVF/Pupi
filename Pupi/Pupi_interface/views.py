@@ -1,4 +1,5 @@
 import os
+import requests
 
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -129,6 +130,13 @@ class GetUnitsWithLocalizationArguments(View):
                     "message": "ERROR - Acceso denegado"
                 })
 
+        ip = self._get_ip(request)
+        if not ip:
+            return JsonResponse(
+                {
+                    "message": "ERROR - Se necesita un valor para el parametro ip"
+                })
+
         brand = self._get_brand(request)
         if not brand:
             return JsonResponse(
@@ -145,10 +153,15 @@ class GetUnitsWithLocalizationArguments(View):
 
         year = self._get_year(request)
         max_cant = self._get_max_amount(request)
-        ip = request.GET.get("ip")
+        response = self._get_info_about(ip)
 
-        lat1 = -34.5247293
-        long1 = -58.4727029
+        if response['status'] == "fail":
+            return JsonResponse(
+                {
+                    "message": "ERROR - IP invalida"
+                })
+        else:
+            lat1, long1 = self._set_visitor_lat_and_long(response)
 
         units_manager = UnitsManager()
         filtered_units, amount_filtered_units = units_manager\
@@ -165,6 +178,22 @@ class GetUnitsWithLocalizationArguments(View):
                 "Unidades": filtered_units_json
             }
         return JsonResponse(info)
+
+    def _set_visitor_lat_and_long(self, response):
+        latitude = response['lat']
+        longitude = response['lon']
+        lat1 = latitude
+        long1 = longitude
+        return lat1, long1
+
+    def _get_info_about(self, ip):
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        response = requests.get("http://ip-api.com/json/" + ip + os.environ['KEY_GEOLOCATION_API'],
+                                headers=headers).json()
+        return response
+
+    def _get_ip(self, request):
+        return request.GET.get("ip")
 
     def _get_model(self, request):
         return request.GET.get("modelo")

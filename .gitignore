@@ -18,3 +18,5 @@ __pycache__/test.cpython-310.pyc
 Pupi/.idea/misc.xml
 .idea/Pupi.iml
 Pupi/.idea/Pupi.iml
+Pupi/Pupi_interface/business/localization/.env
+Pupi/Pupi_interface/business/localization/catalogo-usados.xml

@@ -150,7 +150,7 @@ class UnitsManager:
         return units
 
     def _add_json_unit_in_json_units(self, i, json_unit, units):
-        units.update({f"unidad{i}": json_unit})
+        units.update({f"Unidad{i}": json_unit})
 
     def _set_values_in(self, json_unit, unit):
         json_unit["Version"] = unit.version()

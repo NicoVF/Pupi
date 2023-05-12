@@ -141,12 +141,13 @@ class UnitsManager:
             return None
 
     def gen_json(self, filtered_units):
-        unit_template = self._get_json_unit_template()
+        global units
         units = {}
         for i, unit in enumerate(filtered_units, 1):
-            json_unit = unit_template
-            self._set_values_in(json_unit, unit)
+            json_unit = self._get_json_unit_template()
+            json_unit = self._set_values_in(json_unit, unit)
             self._add_json_unit_in_json_units(i, json_unit, units)
+        print(units)
         return units
 
     def _add_json_unit_in_json_units(self, i, json_unit, units):
@@ -160,6 +161,7 @@ class UnitsManager:
         json_unit["Kilometraje"] = unit.kilometers()
         json_unit["Foto_agencia"] = unit.image()
         json_unit["ID"] = unit.id()
+        return json_unit
 
     def _get_json_unit_template(self):
         unit_template = {

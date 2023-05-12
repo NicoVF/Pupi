@@ -147,7 +147,6 @@ class UnitsManager:
             json_unit = self._get_json_unit_template()
             json_unit = self._set_values_in(json_unit, unit)
             self._add_json_unit_in_json_units(i, json_unit, units)
-        print(units)
         return units
 
     def _add_json_unit_in_json_units(self, i, json_unit, units):

@@ -141,18 +141,14 @@ class UnitsManager:
             return None
 
     def gen_json(self, filtered_units):
-        global units
+
         units = {}
         for i, unit in enumerate(filtered_units, 1):
-            json_unit = self._get_json_unit_template()
-            json_unit = self._set_values_in(json_unit, unit)
-            self._add_json_unit_in_json_units(i, json_unit, units)
+            units[f"Unidad{i}"] = self._dictionary_for(unit)
         return units
 
-    def _add_json_unit_in_json_units(self, i, json_unit, units):
-        units.update({f"Unidad{i}": json_unit})
-
-    def _set_values_in(self, json_unit, unit):
+    def _dictionary_for(self, unit):
+        json_unit = {}
         json_unit["Version"] = unit.version()
         json_unit["Anio"] = unit.year()
         json_unit["Precio"] = unit.price()
@@ -161,15 +157,3 @@ class UnitsManager:
         json_unit["Foto_agencia"] = unit.image()
         json_unit["ID"] = unit.id()
         return json_unit
-
-    def _get_json_unit_template(self):
-        unit_template = {
-            "Version": None,
-            "Anio": None,
-            "Precio": None,
-            "Tipo_cambio": None,
-            "Kilometraje": None,
-            "Foto_agencia": None,
-            "ID": None,
-        }
-        return unit_template

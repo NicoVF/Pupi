@@ -162,6 +162,7 @@ class GetUnitsWithLocalizationArguments(View):
                 })
         else:
             lat1, long1 = self._set_visitor_lat_and_long(response)
+            country, region, city, _zip = self._set_visitor_country_region_city_and_zip(response)
 
         units_manager = UnitsManager()
         filtered_units, amount_filtered_units = units_manager\
@@ -172,6 +173,10 @@ class GetUnitsWithLocalizationArguments(View):
             {
                 "Mensaje": "OK",
                 "IP": ip,
+                "Pais": country,
+                "Provincia": region,
+                "Ciudad": city,
+                "CP": _zip,
                 "Marca": brand,
                 "Modelo": model,
                 "Cantidad de unidades": amount_filtered_units,
@@ -182,9 +187,14 @@ class GetUnitsWithLocalizationArguments(View):
     def _set_visitor_lat_and_long(self, response):
         latitude = response['lat']
         longitude = response['lon']
-        lat1 = latitude
-        long1 = longitude
-        return lat1, long1
+        return latitude, longitude
+
+    def _set_visitor_country_region_city_and_zip(self, response):
+        country = response['country']
+        region = response['regionName']
+        city = response['city']
+        _zip = response['zip']
+        return country, region, city, _zip
 
     def _get_info_about(self, ip):
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}

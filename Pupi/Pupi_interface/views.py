@@ -152,7 +152,7 @@ class GetUnitsWithLocalizationArguments(View):
                 })
 
         year = self._get_year(request)
-        max_cant = self._get_max_amount(request)
+        max_amount = self._get_max_amount(request)
         response = self._get_info_about(ip)
 
         if response['status'] == "fail":
@@ -165,8 +165,10 @@ class GetUnitsWithLocalizationArguments(View):
             country, region, city, _zip = self._set_visitor_country_region_city_and_zip(response)
 
         units_manager = UnitsManager()
-        filtered_units, amount_filtered_units = units_manager\
-            .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year, max_amount=max_cant)
+        kms_around = 80
+        filtered_units, amount_filtered_units, has_units_in_range = units_manager\
+            .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
+                    max_amount=max_amount, km_around=kms_around)
         filtered_units_json = units_manager.gen_json(filtered_units)
 
         info = \
@@ -179,6 +181,7 @@ class GetUnitsWithLocalizationArguments(View):
                 "CP": _zip,
                 "Marca": brand,
                 "Modelo": model,
+                "Unidades segun distancia": has_units_in_range,
                 "Cantidad de unidades": amount_filtered_units,
                 "Unidades": filtered_units_json
             }

@@ -50,9 +50,10 @@ class UnitsManager:
     def __init__(self):
         self._get_catalog()
 
-    def filter(self, brand, model, lat1, long1, year, max_amount):
+    def filter(self, brand, model, lat1, long1, year, max_amount, km_around):
         catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
-        units_filtered = []
+        units_filtered_in_range = []
+        units_filtered_out_of_range = []
 
         versions = self._versions_of_model(brand=brand, model=model)
         for version in versions:
@@ -62,15 +63,20 @@ class UnitsManager:
                 unit = self._get_xpath_unit(brand, catalog, i, model, version, year)
                 unit_lat = self._get_attribute_value(unit, 'lat').replace(',', '.')
                 unit_long = self._get_attribute_value(unit, 'long').replace(',', '.')
-                if self._get_distance_in_km_between_localizations(lat1, long1, unit_lat, unit_long) > 70:
-                    continue
+                if self._get_distance_in_km_between_localizations(lat1, long1, unit_lat, unit_long) > km_around:
+                    self._create_and_append_unit(brand, model, unit, units_filtered_out_of_range, version)
                 else:
-                    unit = self._create_unit(unit, brand, model, version)
-                    units_filtered.append(unit)
-                    if max_amount and len(units_filtered) == max_amount:
-                        return units_filtered, len(units_filtered)
+                    self._create_and_append_unit(brand, model, unit, units_filtered_in_range, version)
+                    if max_amount and len(units_filtered_in_range) == max_amount:
+                        return units_filtered_in_range, len(units_filtered_in_range), True
 
-        return units_filtered, len(units_filtered)
+        if len(units_filtered_in_range) > 0:
+            return units_filtered_in_range, len(units_filtered_in_range), True
+        return units_filtered_out_of_range, len(units_filtered_out_of_range), False
+
+    def _create_and_append_unit(self, brand, model, unit, units_filtered_out_of_range, version):
+        unit = self._create_unit(unit, brand, model, version)
+        units_filtered_out_of_range.append(unit)
 
     def _create_unit(self, unit, brand, model, version):
         unit_brand = brand

@@ -1,4 +1,6 @@
 import os
+import re
+
 import requests
 
 from django.http import JsonResponse
@@ -130,11 +132,11 @@ class GetUnitsWithLocalizationArguments(View):
                     "message": "ERROR - Acceso denegado"
                 })
 
-        ip = self._get_ip(request)
-        if not ip:
+        ip, phone = self._get_ip_or_phone(request)
+        if not ip and not phone:
             return JsonResponse(
                 {
-                    "message": "ERROR - Se necesita un valor para el parametro ip"
+                    "message": "ERROR - Se necesita un valor para el parametro ip o telefono"
                 })
 
         brand = self._get_brand(request)
@@ -153,60 +155,114 @@ class GetUnitsWithLocalizationArguments(View):
 
         year = self._get_year(request)
         max_amount = self._get_max_amount(request)
-        response = self._get_info_about(ip)
-
-        if response['status'] == "fail":
-            return JsonResponse(
-                {
-                    "message": "ERROR - IP invalida"
-                })
-        else:
-            lat1, long1 = self._set_visitor_lat_and_long(response)
-            country, region, city, _zip = self._set_visitor_country_region_city_and_zip(response)
 
         units_manager = UnitsManager()
         kms_around = 80
-        filtered_units, amount_filtered_units, has_units_in_range = units_manager\
-            .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
-                    max_amount=max_amount, km_around=kms_around)
-        filtered_units_json = units_manager.gen_json(filtered_units)
 
-        info = \
-            {
-                "Mensaje": "OK",
-                "IP": ip,
-                "Pais": country,
-                "Provincia": region,
-                "Ciudad": city,
-                "CP": _zip,
-                "Marca": brand,
-                "Modelo": model,
-                "Unidades segun distancia": has_units_in_range,
-                "Cantidad de unidades": amount_filtered_units,
-                "Unidades": filtered_units_json
-            }
-        return JsonResponse(info)
+        if ip:
+            ip_info_response = self._get_info_about_ip(ip)
 
-    def _set_visitor_lat_and_long(self, response):
+            if ip_info_response['status'] == "fail":
+                return JsonResponse(
+                    {
+                        "message": "ERROR - IP invalida"
+                    })
+            else:
+                country, region, city, _zip = self._set_visitor_country_region_city_and_zip_from_ip(ip_info_response)
+                lat1, long1 = self._set_visitor_lat_and_long_from_ip(ip_info_response)
+
+            filtered_units, amount_filtered_units, has_units_in_range = units_manager\
+                .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
+                        max_amount=max_amount, km_around=kms_around)
+            filtered_units_json = units_manager.gen_json(filtered_units)
+            info = \
+                {
+                    "Mensaje": "OK",
+                    "IP": ip,
+                    "Telefono": phone,
+                    "Pais": country,
+                    "Provincia": region,
+                    "Ciudad": city,
+                    "CP": _zip,
+                    "Marca": brand,
+                    "Modelo": model,
+                    "Unidades segun distancia": has_units_in_range,
+                    "Cantidad de unidades": amount_filtered_units,
+                    "Unidades": filtered_units_json
+                }
+
+            return JsonResponse(info)
+
+        if phone and not ip:
+            phone_info_response = self._get_info_about_phone(phone)
+            if "error" in phone_info_response:
+                return JsonResponse(
+                    {
+                        "message": "ERROR - Telefono invalido"
+                    })
+            else:
+                country, region, city, _zip = self._set_visitor_country_region_city_and_zip_from_phone(phone_info_response)
+                lat1, long1 = self._set_visitor_lat_and_long_from_phone(region + " " + city)
+                info = \
+                    {
+                        "mensaje": phone_info_response
+                    }
+
+            filtered_units, amount_filtered_units, has_units_in_range = units_manager \
+                .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
+                        max_amount=max_amount, km_around=kms_around)
+            filtered_units_json = units_manager.gen_json(filtered_units)
+            info = \
+                {
+                    "Mensaje": "OK",
+                    "IP": ip,
+                    "Telefono": phone,
+                    "Pais": country,
+                    "Provincia": region,
+                    "Ciudad": city,
+                    "CP": _zip,
+                    "Marca": brand,
+                    "Modelo": model,
+                    "Unidades segun distancia": has_units_in_range,
+                    "Cantidad de unidades": amount_filtered_units,
+                    "Unidades": filtered_units_json
+                }
+
+            return JsonResponse(info)
+
+    def _set_visitor_lat_and_long_from_ip(self, response):
         latitude = response['lat']
         longitude = response['lon']
         return latitude, longitude
 
-    def _set_visitor_country_region_city_and_zip(self, response):
+    def _set_visitor_country_region_city_and_zip_from_ip(self, response):
         country = response['country']
         region = response['regionName']
         city = response['city']
         _zip = response['zip']
         return country, region, city, _zip
 
-    def _get_info_about(self, ip):
+    def _get_info_about_ip(self, ip):
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         response = requests.get("http://ip-api.com/json/" + ip + os.environ['KEY_GEOLOCATION_API'],
                                 headers=headers).json()
         return response
 
-    def _get_ip(self, request):
-        return request.GET.get("ip")
+    def _get_info_about_phone(self, phone):
+        body = f"<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n    <s:Body>\r\n        " \
+               f"<Normalizar xmlns=\"http://tempuri.org/\">\r\n            <sXml>\r\n                &lt;xml&gt;\r\n" \
+               f"                    &lt;telefonos&gt;\r\n                        &lt;telefono codigo=&quot;1&quot; " \
+               f"prefijopais=&quot;+54&quot;&gt;{phone}&lt;/telefono&gt;\r\n                    &lt;/telefonos&gt;" \
+               f"\r\n                &lt;/xml&gt;\r\n            </sXml>\r\n        " \
+               f"</Normalizar>\r\n    </s:Body>\r\n</s:Envelope>"
+        headers = {'Content-Type': 'text/xml', 'SOAPAction': 'http://tempuri.org/IService1/Normalizar'}
+        response = requests.post(os.environ['URL_COVER_NORMALIZATION_API'], headers=headers, data=body).text
+        return response
+
+    def _get_ip_or_phone(self, request):
+        ip = request.GET.get("ip")
+        tel = request.GET.get("telefono")
+        return ip, tel
 
     def _get_model(self, request):
         return request.GET.get("modelo")
@@ -230,3 +286,22 @@ class GetUnitsWithLocalizationArguments(View):
 
     def _get_token(self, request):
         return request.GET.get("token") == os.environ['TOKEN_API_UNITS_THROUGH_LOCALIZATION']
+
+    def _set_visitor_lat_and_long_from_phone(self, region_and_city):
+        lat, long = self._get_lat_long_of(region_and_city)
+        return lat, long
+
+    def _get_lat_long_of(self, region_and_city):
+        headers = {'Accept': 'application/json'}
+        params = {'region': 'ar', 'query': f'{region_and_city}', 'key': os.environ['KEY_GOOGLE_MAPS_API_TEXT_SEARCH']}
+        response = requests.get(os.environ['URL_GOOGLE_MAPS_API_TEXT_SEARCH'], headers=headers, params=params).json()
+        lat = response['results'][0]['geometry']['location']['lat']
+        long = response['results'][0]['geometry']['location']['lng']
+        return lat, long
+
+    def _set_visitor_country_region_city_and_zip_from_phone(self, phone_info_response):
+        country = None
+        _zip = None
+        province = re.search("(?<=Provincia=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        city = re.search("(?<=Localidad=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        return country, province, city, _zip

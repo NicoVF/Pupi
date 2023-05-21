@@ -171,25 +171,8 @@ class GetUnitsWithLocalizationArguments(View):
                 country, region, city, _zip = self._set_visitor_country_region_city_and_zip_from_ip(ip_info_response)
                 lat1, long1 = self._set_visitor_lat_and_long_from_ip(ip_info_response)
 
-            filtered_units, amount_filtered_units, has_units_in_range = units_manager\
-                .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
-                        max_amount=max_amount, km_around=kms_around)
-            filtered_units_json = units_manager.gen_json(filtered_units)
-            info = \
-                {
-                    "Mensaje": "OK",
-                    "IP": ip,
-                    "Telefono": phone,
-                    "Pais": country,
-                    "Provincia": region,
-                    "Ciudad": city,
-                    "CP": _zip,
-                    "Marca": brand,
-                    "Modelo": model,
-                    "Unidades segun distancia": has_units_in_range,
-                    "Cantidad de unidades": amount_filtered_units,
-                    "Unidades": filtered_units_json
-                }
+            info = self._get_filtered_info(units_manager, ip, phone, brand, model, year, max_amount, kms_around, lat1,
+                                           long1, country, region, city, _zip)
 
             return JsonResponse(info)
 
@@ -203,32 +186,34 @@ class GetUnitsWithLocalizationArguments(View):
             else:
                 country, region, city, _zip = self._set_visitor_country_region_city_and_zip_from_phone(phone_info_response)
                 lat1, long1 = self._set_visitor_lat_and_long_from_phone(region + " " + city)
-                info = \
-                    {
-                        "mensaje": phone_info_response
-                    }
 
-            filtered_units, amount_filtered_units, has_units_in_range = units_manager \
-                .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
-                        max_amount=max_amount, km_around=kms_around)
-            filtered_units_json = units_manager.gen_json(filtered_units)
-            info = \
-                {
-                    "Mensaje": "OK",
-                    "IP": ip,
-                    "Telefono": phone,
-                    "Pais": country,
-                    "Provincia": region,
-                    "Ciudad": city,
-                    "CP": _zip,
-                    "Marca": brand,
-                    "Modelo": model,
-                    "Unidades segun distancia": has_units_in_range,
-                    "Cantidad de unidades": amount_filtered_units,
-                    "Unidades": filtered_units_json
-                }
+            info = self._get_filtered_info(units_manager, ip, phone, brand, model, year, max_amount, kms_around, lat1,
+                                           long1, country, region, city, _zip)
 
             return JsonResponse(info)
+
+    def _get_filtered_info(self, units_manager, ip, phone, brand, model, year, max_amount, kms_around, lat1, long1,
+                           country, region, city, _zip):
+        filtered_units, amount_filtered_units, has_units_in_range = units_manager \
+            .filter(brand=brand, model=model, lat1=lat1, long1=long1, year=year,
+                    max_amount=max_amount, km_around=kms_around)
+        filtered_units_json = units_manager.gen_json(filtered_units)
+        info = \
+            {
+                "Mensaje": "OK",
+                "IP": ip,
+                "Telefono": phone,
+                "Pais": country,
+                "Provincia": region,
+                "Ciudad": city,
+                "CP": _zip,
+                "Marca": brand,
+                "Modelo": model,
+                "Unidades segun distancia": has_units_in_range,
+                "Cantidad de unidades": amount_filtered_units,
+                "Unidades": filtered_units_json
+            }
+        return info
 
     def _set_visitor_lat_and_long_from_ip(self, response):
         latitude = response['lat']

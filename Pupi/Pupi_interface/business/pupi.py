@@ -274,7 +274,8 @@ class Pupi:
 
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=current_unit_for_sale.version(),
-                                        estado='activo', enLista='activo', id=current_unit_for_sale.version())
+                                        estado='activo', enLista='activo',
+                                        id=current_unit_for_sale.model() + " " + current_unit_for_sale.version())
                 last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)

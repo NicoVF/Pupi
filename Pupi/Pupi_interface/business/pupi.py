@@ -235,7 +235,7 @@ class UnitForSale:
 class Pupi:
 
     def __init__(self):
-        self._usd_in_ars = 400
+        self._usd_in_ars = 500
 
     def normalize_and_sort_csv(self, csv_to_normalize_and_sort):
         normalized_csv = self.normalize_csv(csv_to_normalize_and_sort)

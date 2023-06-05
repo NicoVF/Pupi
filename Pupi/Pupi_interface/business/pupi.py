@@ -375,6 +375,7 @@ class Pupi:
             unit_attr["anio"] = str(unit_for_sale.year())
         if unit_for_sale.has_price():
             unit_attr["precio"] = str(unit_for_sale.price())
+            unit_attr["precioAMostrar"] = str(unit_for_sale.normalized_price())
         if unit_for_sale.has_currency():
             unit_attr["tipoCambio"] = unit_for_sale.currency()
         if unit_for_sale.has_zone():

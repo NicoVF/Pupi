@@ -228,7 +228,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"A1 Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -244,10 +244,10 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"1.2\">\n\
+            <version display=\"1.2\" estado=\"activo\" enLista=\"activo\" id=\"A1 1.2\">\n\
                 <unidad />\n\
             </version>\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"A1 Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -263,7 +263,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"A1 Sportback\">\n\
                 <unidad />\n\
             </version>\n\
         </modelo>\n\
@@ -322,7 +322,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"Sportback\">\n\
+            <version display=\"Sportback\" estado=\"activo\" enLista=\"activo\" id=\"A1 Sportback\">\n\
                 <unidad id=\"d6ac50a9-8377-4b2d-bcf8-8d50d4be9782\" />\n\
             </version>\n\
         </modelo>\n\
@@ -399,7 +399,7 @@ class PupiConvertCsvToXmlTest(unittest.TestCase):
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Audi\" estado=\"activo\">\n\
         <modelo display=\"A1\" estado=\"activo\" enLista=\"activo\" id=\"a1\">\n\
-            <unidad precio=\"1500000\" />\n\
+            <unidad precio=\"1500000\" precioAMostrar=\"1500000\" />\n\
         </modelo>\n\
     </marca>\n\
 </marcas>\
@@ -525,8 +525,8 @@ Nissan,Note,1.6 Sense Pure Drive,2018,4290000,https://api.deconcesionarias.com.a
 <marcas xmlns=\"http://chat.soybot.com/catalogo/V1\">\n\
     <marca nombre=\"Nissan\" estado=\"activo\">\n\
         <modelo display=\"March\" estado=\"activo\" enLista=\"activo\" id=\"march\">\n\
-            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
-                <unidad id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" anio=\"2018\" precio=\"3100000\" tipoCambio=\"ARS\" zona=\"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"March 1.6 Sense Pure Drive\">\n\
+                <unidad id=\"3e9c3edf-ecc7-4167-be8a-6f02b2abcbd5\" kilometros=\"65000\" anio=\"2018\" precio=\"3100000\" precioAMostrar=\"3100000\" tipoCambio=\"ARS\" zona=\"San Luis, Av. Del Fundador Esq, Las Voces Del Chorrillero,\" lat=\"-33.2941809\" long=\"-66.2956203\" cliente=\"ExpoUsados\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
                     <imagenes>\n\
                         <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/e5e06f5f-63a6-4486-975a-ee228dc74e1f/?e5e06f5f-63a6-4486-975a-ee228dc74e1f.jpg</url>\n\
                     </imagenes>\n\
@@ -534,8 +534,8 @@ Nissan,Note,1.6 Sense Pure Drive,2018,4290000,https://api.deconcesionarias.com.a
             </version>\n\
         </modelo>\n\
         <modelo display=\"Note\" estado=\"activo\" enLista=\"activo\" id=\"note\">\n\
-            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"1.6 Sense Pure Drive\">\n\
-                <unidad id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" anio=\"2018\" precio=\"4290000\" tipoCambio=\"ARS\" zona=\"Pilar, Las Camelias, 3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
+            <version display=\"1.6 Sense Pure Drive\" estado=\"activo\" enLista=\"activo\" id=\"Note 1.6 Sense Pure Drive\">\n\
+                <unidad id=\"7fd4db2a-eb99-46d8-8ac3-01dcd66dd436\" kilometros=\"70000\" anio=\"2018\" precio=\"4290000\" precioAMostrar=\"4290000\" tipoCambio=\"ARS\" zona=\"Pilar, Las Camelias, 3190\" lat=\"-34.4383348\" long=\"-58.7918752\" cliente=\"Autonorte Pilar S.A\" proveedorProveedores=\"DeConcesionarias\" tipoVenta=\"Usado\">\n\
                     <imagenes>\n\
                         <url tipo=\"foto-agencia\">https://api.deconcesionarias.com.ar/api/files/55af7001-58e5-4228-b1bb-888ff9106b18/?55af7001-58e5-4228-b1bb-888ff9106b18.jpg</url>\n\
                     </imagenes>\n\

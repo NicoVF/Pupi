@@ -57,6 +57,10 @@ class UnitForSale:
             return False
         if not self.has_version() and not other.has_version():
             return False
+        if not self.has_version() and other.has_version():
+            return False
+        if self.has_version() and not other.has_version():
+            return True
         if self.version() < other.version():
             return True
         if self.version() > other.version():

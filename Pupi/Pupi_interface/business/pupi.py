@@ -284,6 +284,8 @@ class Pupi:
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)
             if unit_node_must_be_inserted:
+                if current_unit_for_sale.version() is None:
+                    last_valid_parent_for_unit_element = model
                 self._create_unit_element(last_valid_parent_for_unit_element, current_unit_for_sale)
 
             previous_unit_for_sale = current_unit_for_sale
@@ -482,7 +484,7 @@ class Pupi:
         return [
             unit.brand(),
             unit.model(),
-            unit.version(),
+            unit.version() if unit.version() is not None else "",
             unit.year(),
             unit.price(),
             unit.image_url(),

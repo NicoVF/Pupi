@@ -62,13 +62,13 @@ class UnitForSale:
             return False
         if self.has_version() and not other.has_version():
             return True
-        if self.version() < other.version():
-            return True
-        if self.version() > other.version():
-            return False
         if self.provider() == 'Angel' and other.provider() != 'Angel':
             return True
         if self.provider() != 'Angel' and other.provider() == 'Angel':
+            return False
+        if self.version() < other.version():
+            return True
+        if self.version() > other.version():
             return False
         if self.year() < other.year():
             return True
@@ -284,7 +284,8 @@ class Pupi:
             if version_node_must_be_inserted:
                 version = ET.SubElement(model, "version", display=current_unit_for_sale.version(),
                                         estado='activo', enLista='activo',
-                                        id=current_unit_for_sale.model() + " " + current_unit_for_sale.version())
+                                        id=current_unit_for_sale.model() + " " + current_unit_for_sale.version()
+                                           + " " + current_unit_for_sale.provider())
                 last_valid_parent_for_unit_element = version
 
             unit_node_must_be_inserted = self._must_insert_unit_element(current_unit_for_sale, previous_unit_for_sale)

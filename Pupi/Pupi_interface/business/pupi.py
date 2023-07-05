@@ -44,7 +44,8 @@ class UnitForSale:
         self._normalized_price = normalized_price
 
     def __eq__(self, other):
-        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() and self.price() == other.price() and self.year() == other.year()
+        return self._brand == other.brand() and self._model == other.model() and self._version == other.version() \
+               and self.price() == other.price() and self.year() == other.year() and self.provider() == other.provider()
 
     def __lt__(self, other):
         if self.brand() < other.brand():
@@ -64,6 +65,10 @@ class UnitForSale:
         if self.version() < other.version():
             return True
         if self.version() > other.version():
+            return False
+        if self.provider() == 'Angel' and other.provider() != 'Angel':
+            return True
+        if self.provider() != 'Angel' and other.provider() == 'Angel':
             return False
         if self.year() < other.year():
             return True

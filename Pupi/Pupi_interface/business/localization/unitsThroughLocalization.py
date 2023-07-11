@@ -6,16 +6,20 @@ import lxml.etree as ET
 
 class Unit:
 
-    def __init__(self, brand, model, version, year, price, kilometers, currency, image, _id):
+    def __init__(self, brand, model, version, year, priceToShow,price, kilometers, currency,
+                 image, _id, provider, providerOfProviders):
         self._brand = brand
         self._model = model
         self._version = version
         self._year = year
+        self._priceToShow = priceToShow
         self._price = price
         self._kilometers = kilometers
         self._currency = currency
         self._image = image
         self._id = _id
+        self._provider = provider
+        self._providerOfProviders = providerOfProviders
 
     def brand(self):
         return self._brand
@@ -28,6 +32,9 @@ class Unit:
 
     def year(self):
         return self._year
+
+    def priceToShow(self):
+        return self._priceToShow
 
     def price(self):
         return self._price
@@ -43,6 +50,12 @@ class Unit:
 
     def id(self):
         return self._id
+
+    def provider(self):
+        return self._provider
+
+    def providerOfProviders(self):
+        return self._providerOfProviders
 
 
 class UnitsManager:
@@ -82,25 +95,29 @@ class UnitsManager:
         unit_brand = brand
         unit_version = version
         unit_year = self._get_attribute_value(unit, "anio")
+        unit_priceToShow = self._get_attribute_value(unit,"precioAMostrar")
         unit_price = self._get_attribute_value(unit, "precio")
         unit_currency = self._get_attribute_value(unit, "tipoCambio")
         unit_kilometers = self._get_attribute_value(unit, "kilometros")
         unit_image = self._get_subelement_value(unit, "imagenes/url")
         unit_id = self._get_attribute_value(unit, "id")
-        unit = Unit(unit_brand, model, unit_version, unit_year, unit_price,
-                    unit_kilometers, unit_currency, unit_image, unit_id)
+        unit_provider = self._get_attribute_value(unit, "cliente")
+        unit_providerOfProviders = self._get_attribute_value(unit, "proveedorProveedores")
+        unit = Unit(unit_brand, model, unit_version, unit_year, unit_priceToShow, unit_price,
+                    unit_kilometers, unit_currency, unit_image, unit_id, unit_provider, unit_providerOfProviders)
         return unit
 
     def _get_xpath_unit(self, brand, catalog, i, model, version, year):
         if not year:
             unit = catalog.xpath(f"(//marca[@nombre='{brand}']/modelo[@display='{model}']"
                                  f"/version[@display='{version}']"
-                                 f"/unidad[@lat][@long][@anio][@precio][@tipoCambio][@kilometros][@id])[{i + 1}]")
+                                 f"/unidad[@lat][@long][@anio][@precioAMostrar][@precio]"
+                                 f"[@tipoCambio][@kilometros][@id][@cliente])[{i + 1}]")
         else:
             unit = catalog.xpath(f"(//marca[@nombre='{brand}']/modelo[@display='{model}']"
                                  f"/version[@display='{version}']"
-                                 f"/unidad[@lat][@long][@anio='{year}'][@precio]"
-                                 f"[@tipoCambio][@kilometros][@id])[{i + 1}]")
+                                 f"/unidad[@lat][@long][@anio='{year}'][@precioAMostrar][@precio]"
+                                 f"[@tipoCambio][@kilometros][@id][@cliente])[{i + 1}]")
         return unit
 
     def _units_amount_of_model_and_version(self, brand, model, version, year):
@@ -138,7 +155,10 @@ class UnitsManager:
         return km_distance
 
     def _get_attribute_value(self, element, attribute_name):
-        return element[0].attrib[f'{attribute_name}']
+        try:
+            return element[0].attrib[f'{attribute_name}']
+        except:
+            return None
 
     def _get_subelement_value(self, element, path):
         try:
@@ -157,9 +177,12 @@ class UnitsManager:
         json_unit = {}
         json_unit["Version"] = unit.version()
         json_unit["Anio"] = unit.year()
+        json_unit["PrecioAMostrar"] = unit.priceToShow()
         json_unit["Precio"] = unit.price()
         json_unit["Tipo_cambio"] = unit.currency()
         json_unit["Kilometraje"] = unit.kilometers()
         json_unit["Foto_agencia"] = unit.image()
         json_unit["ID"] = unit.id()
+        json_unit["Proveedor"] = unit.provider()
+        json_unit["ProveedorDeProveedores"] = unit.providerOfProviders()
         return json_unit

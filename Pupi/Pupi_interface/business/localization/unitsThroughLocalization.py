@@ -6,8 +6,8 @@ import lxml.etree as ET
 
 class Unit:
 
-    def __init__(self, brand, model, version, year, priceToShow,price, kilometers, currency,
-                 image, _id, provider, providerOfProviders):
+    def __init__(self, brand, model, version, year, priceToShow, price, kilometers, currency,
+                 image, _id, provider, providerOfProviders, idClient,entryDate):
         self._brand = brand
         self._model = model
         self._version = version
@@ -20,6 +20,8 @@ class Unit:
         self._id = _id
         self._provider = provider
         self._providerOfProviders = providerOfProviders
+        self._idClient = idClient
+        self._entryDate = entryDate
 
     def brand(self):
         return self._brand
@@ -56,6 +58,12 @@ class Unit:
 
     def providerOfProviders(self):
         return self._providerOfProviders
+
+    def idClient(self):
+        return self._idClient
+
+    def entryDate(self):
+        return self._entryDate
 
 
 class UnitsManager:
@@ -103,8 +111,11 @@ class UnitsManager:
         unit_id = self._get_attribute_value(unit, "id")
         unit_provider = self._get_attribute_value(unit, "cliente")
         unit_providerOfProviders = self._get_attribute_value(unit, "proveedorProveedores")
+        unit_idClient = self._get_attribute_value(unit, "idDeCliente")
+        unit_entryDate = self._get_attribute_value(unit, "fechaAlta")
         unit = Unit(unit_brand, model, unit_version, unit_year, unit_priceToShow, unit_price,
-                    unit_kilometers, unit_currency, unit_image, unit_id, unit_provider, unit_providerOfProviders)
+                    unit_kilometers, unit_currency, unit_image, unit_id, unit_provider,
+                    unit_providerOfProviders, unit_idClient, unit_entryDate)
         return unit
 
     def _get_xpath_unit(self, brand, catalog, i, model, version, year):
@@ -185,4 +196,6 @@ class UnitsManager:
         json_unit["ID"] = unit.id()
         json_unit["Proveedor"] = unit.provider()
         json_unit["ProveedorDeProveedores"] = unit.providerOfProviders()
+        json_unit["ClienteID"] = unit.idClient()
+        json_unit["FechaAlta"] = unit.entryDate()
         return json_unit

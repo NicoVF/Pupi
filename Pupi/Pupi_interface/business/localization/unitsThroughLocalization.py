@@ -7,7 +7,7 @@ import lxml.etree as ET
 class Unit:
 
     def __init__(self, brand, model, version, year, priceToShow, price, kilometers, currency,
-                 image, _id, provider, providerOfProviders, idClient,entryDate):
+                 image, _id, provider, providerOfProviders, idClient, entryDate):
         self._brand = brand
         self._model = model
         self._version = version
@@ -75,25 +75,37 @@ class UnitsManager:
         catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
         units_filtered_in_range = []
         units_filtered_out_of_range = []
+        brands = []
+        models = []
+        km_around = self.set_40_km_around_dont_has_brand_and_model(brand, km_around, model)
+        brands = self._brands(brand, brands)
+        models = self._models(model, models)
 
-        versions = self._versions_of_model(brand=brand, model=model)
-        for version in versions:
-            units_amount = self._units_amount_of_model_and_version(brand=brand, model=model,
-                                                                   version=version, year=year)
-            for i in range(units_amount):
-                unit = self._get_xpath_unit(brand, catalog, i, model, version, year)
-                unit_lat = self._get_attribute_value(unit, 'lat').replace(',', '.')
-                unit_long = self._get_attribute_value(unit, 'long').replace(',', '.')
-                if self._get_distance_in_km_between_localizations(lat1, long1, unit_lat, unit_long) > km_around:
-                    self._create_and_append_unit(brand, model, unit, units_filtered_out_of_range, version)
-                else:
-                    self._create_and_append_unit(brand, model, unit, units_filtered_in_range, version)
-                    if max_amount and len(units_filtered_in_range) == max_amount:
-                        return units_filtered_in_range, len(units_filtered_in_range), True
+        for brand in brands:
+            for model in models:
+                versions = self._versions(brand=brand, model=model)
+                for version in versions:
+                    units_amount = self._units_amount(brand=brand, model=model,
+                                                      version=version, year=year)
+                    for i in range(units_amount):
+                        unit = self._get_xpath_unit(brand, catalog, i, model, version, year)
+                        unit_lat = self._get_attribute_value(unit, 'lat').replace(',', '.')
+                        unit_long = self._get_attribute_value(unit, 'long').replace(',', '.')
+                        if self._get_distance_in_km_between_localizations(lat1, long1, unit_lat, unit_long) > km_around:
+                            self._create_and_append_unit(brand, model, unit, units_filtered_out_of_range, version)
+                        else:
+                            self._create_and_append_unit(brand, model, unit, units_filtered_in_range, version)
+                            if max_amount and len(units_filtered_in_range) == max_amount:
+                                return units_filtered_in_range, len(units_filtered_in_range), True
 
         if len(units_filtered_in_range) > 0:
             return units_filtered_in_range, len(units_filtered_in_range), True
         return units_filtered_out_of_range, len(units_filtered_out_of_range), False
+
+    def set_40_km_around_dont_has_brand_and_model(self, brand, km_around, model):
+        if not brand or not model:
+            km_around = 40
+        return km_around
 
     def _create_and_append_unit(self, brand, model, unit, units_filtered_out_of_range, version):
         unit = self._create_unit(unit, brand, model, version)
@@ -101,9 +113,10 @@ class UnitsManager:
 
     def _create_unit(self, unit, brand, model, version):
         unit_brand = brand
+        unit_model = model
         unit_version = version
         unit_year = self._get_attribute_value(unit, "anio")
-        unit_priceToShow = self._get_attribute_value(unit,"precioAMostrar")
+        unit_priceToShow = self._get_attribute_value(unit, "precioAMostrar")
         unit_price = self._get_attribute_value(unit, "precio")
         unit_currency = self._get_attribute_value(unit, "tipoCambio")
         unit_kilometers = self._get_attribute_value(unit, "kilometros")
@@ -113,7 +126,7 @@ class UnitsManager:
         unit_providerOfProviders = self._get_attribute_value(unit, "proveedorProveedores")
         unit_idClient = self._get_attribute_value(unit, "idDeCliente")
         unit_entryDate = self._get_attribute_value(unit, "fechaAlta")
-        unit = Unit(unit_brand, model, unit_version, unit_year, unit_priceToShow, unit_price,
+        unit = Unit(unit_brand, unit_model, unit_version, unit_year, unit_priceToShow, unit_price,
                     unit_kilometers, unit_currency, unit_image, unit_id, unit_provider,
                     unit_providerOfProviders, unit_idClient, unit_entryDate)
         return unit
@@ -131,7 +144,7 @@ class UnitsManager:
                                  f"[@tipoCambio][@kilometros][@id][@cliente])[{i + 1}]")
         return unit
 
-    def _units_amount_of_model_and_version(self, brand, model, version, year):
+    def _units_amount(self, brand, model, version, year):
         catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
         amount = None
         if not year:
@@ -144,10 +157,28 @@ class UnitsManager:
                                        f"/unidad[@lat][@long][@anio={year}][@precio][@kilometros][@tipoCambio][@id])"))
         return amount
 
-    def _versions_of_model(self, brand, model):
+    def _brands(self, brand, brands):
+        if not brand:
+            catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
+            brands = catalog.xpath(f"//marca/@nombre")
+            return brands
+        else:
+            brands.append(brand)
+            return brands
+
+    def _models(self, model, models):
+        if not model:
+            catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
+            models = catalog.xpath(f"//marca/modelo/@display")
+            return models
+        else:
+            models.append(model)
+            return models
+
+    def _versions(self, brand, model):
         catalog = ET.parse('Pupi_interface/business/localization/catalogo-usados.xml')
-        amount = catalog.xpath(f"//marca[@nombre='{brand}']/modelo[@display='{model}']/version/@display")
-        return amount
+        versions = catalog.xpath(f"//marca[@nombre='{brand}']/modelo[@display='{model}']/version/@display")
+        return versions
 
     def _get_catalog(self):
 
@@ -186,6 +217,8 @@ class UnitsManager:
 
     def _dictionary_for(self, unit):
         json_unit = {}
+        json_unit["Marca"] = unit.brand()
+        json_unit["Modelo"] = unit.model()
         json_unit["Version"] = unit.version()
         json_unit["Anio"] = unit.year()
         json_unit["PrecioAMostrar"] = unit.priceToShow()

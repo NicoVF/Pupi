@@ -140,19 +140,7 @@ class GetUnitsWithLocalizationArguments(View):
                 })
 
         brand = self._get_brand(request)
-        if not brand:
-            return JsonResponse(
-                {
-                    "message": "ERROR - Se necesita un valor para el parametro marca"
-                })
-
         model = self._get_model(request)
-        if not model:
-            return JsonResponse(
-                {
-                    "message": "ERROR - Se necesita un valor para el parametro modelo"
-                })
-
         year = self._get_year(request)
         max_amount = self._get_max_amount(request)
 
@@ -207,8 +195,6 @@ class GetUnitsWithLocalizationArguments(View):
                 "Provincia": region,
                 "Ciudad": city,
                 "CP": _zip,
-                "Marca": brand,
-                "Modelo": model,
                 "Unidades segun distancia": has_units_in_range,
                 "Cantidad de unidades": amount_filtered_units,
                 "Unidades": filtered_units_json

@@ -93,6 +93,8 @@ class UnitsManager:
                         unit_long = self._get_attribute_value(unit, 'long').replace(',', '.')
                         if self._get_distance_in_km_between_localizations(lat1, long1, unit_lat, unit_long) > km_around:
                             self._create_and_append_unit(brand, model, unit, units_filtered_out_of_range, version)
+                            if max_amount and len(units_filtered_out_of_range) == max_amount:
+                                return units_filtered_out_of_range, len(units_filtered_out_of_range), False
                         else:
                             self._create_and_append_unit(brand, model, unit, units_filtered_in_range, version)
                             if max_amount and len(units_filtered_in_range) == max_amount:

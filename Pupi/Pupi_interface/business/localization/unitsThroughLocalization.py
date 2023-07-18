@@ -111,6 +111,7 @@ class UnitsManager:
 
     def _create_and_append_unit(self, brand, model, unit, units_filtered_out_of_range, version):
         unit = self._create_unit(unit, brand, model, version)
+        unit = self._normalize_unit(unit)
         units_filtered_out_of_range.append(unit)
 
     def _create_unit(self, unit, brand, model, version):
@@ -234,3 +235,11 @@ class UnitsManager:
         json_unit["ClienteID"] = unit.idClient()
         json_unit["FechaAlta"] = unit.entryDate()
         return json_unit
+
+    def _normalize_unit(self, unit):
+        unit._priceToShow = self._normalize_priceToShow(unit.priceToShow())
+        return unit
+
+    def _normalize_priceToShow(self, price):
+        price = f"${int(price):,}"
+        return price.replace(",", ".")

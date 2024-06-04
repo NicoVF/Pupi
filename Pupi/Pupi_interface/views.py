@@ -2,16 +2,20 @@ import os
 import re
 
 import requests
+from django.conf import settings
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views import View
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 
 from Pupi_interface.api_calls.dollar_value import DollarValue
 from Pupi_interface.business import Result, Cliente
 from Pupi_interface.business.remote_pupi import RemotePupi
 from Pupi_interface.business.localization.unitsThroughLocalization import UnitsManager
+
+
 
 
 # Create your views here.
@@ -276,3 +280,89 @@ class GetUnitsWithLocalizationArguments(View):
         province = re.search("(?<=Provincia=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
         city = re.search("(?<=Localidad=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
         return country, province, city, _zip
+
+
+class VerificarPhone(View):
+
+    def get(self, request):
+
+        print(settings.TOKEN_API_PHONE_SUSPICIOUS)
+        if not self._get_token(request):
+            return JsonResponse(
+                {
+                    "message": "ERROR - Acceso denegado"
+                })
+
+        phone = self._get_phone(request)
+        phoneNormalized = '549'+phone
+        if not phone:
+            return JsonResponse(
+                {
+                    "message": "ERROR - Se necesita un valor para el parametro teléfono"
+                })
+
+        if phone:
+            phone_info_response = self._get_info_about_phone(phone)
+            print(phone_info_response)
+            if "error" in phone_info_response:
+                return JsonResponse(
+                    {
+                        "message": "ERROR - Telefono invalido"
+                    })
+            else:
+                province, city, prefijo, isok = self._set_visitor_province_city_prefijo_and_isok_from_phone(phone_info_response)
+                return JsonResponse(
+                    {
+                        'teléfono': f'{phone}',
+                        'Provincia': f'{province}',
+                        'Ciudad': f'{city}',
+                        'Prefijo': f'{prefijo}',
+                        'telefono normalizado': f'+549{phone}'
+                    })
+
+    def _get_token(self, request):
+        return request.GET.get("token") == settings.TOKEN_API_PHONE_SUSPICIOUS
+
+
+    def _get_phone(self, request):
+        tel = request.GET.get("telefono")
+        return tel
+
+    def _get_info_about_phone(self, phone):
+        body = f"<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n    <s:Body>\r\n        " \
+               f"<Normalizar xmlns=\"http://tempuri.org/\">\r\n            <sXml>\r\n                &lt;xml&gt;\r\n" \
+               f"                    &lt;telefonos&gt;\r\n                        &lt;telefono codigo=&quot;1&quot; " \
+               f"prefijopais=&quot;+54&quot;&gt;{phone}&lt;/telefono&gt;\r\n                    &lt;/telefonos&gt;" \
+               f"\r\n                &lt;/xml&gt;\r\n            </sXml>\r\n        " \
+               f"</Normalizar>\r\n    </s:Body>\r\n</s:Envelope>"
+        headers = {'Content-Type': 'text/xml', 'SOAPAction': 'http://tempuri.org/IService1/Normalizar'}
+        response = requests.post(os.environ['URL_COVER_NORMALIZATION_API'], headers=headers, data=body).text
+        return response
+
+    def _set_visitor_province_city_prefijo_and_isok_from_phone(self, phone_info_response):
+        province = re.search("(?<=Provincia=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        city = re.search("(?<=Localidad=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        prefijo = re.search("(?<=Prefijo=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        isok = re.search("(?<=IsOk=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
+        return province, city, prefijo, isok
+
+
+class WebhookWhatsapp(View):
+
+    @csrf_exempt
+    def webhookWhatsapp(request):
+        if request.method == 'POST':
+            def post(self, request, *args, **kwargs):
+                whatsapp_evento = request.data
+                return HttpResponse(status=200)
+        return HttpResponse(status=405)
+    def get(self, request, *args, **kwargs):
+        mode = request.GET['hub.mode']
+        token = request.GET['hub.verify_token']
+        challenge = request.GET['hub.challenge']
+
+        if mode == 'subscribe' and token == settings.WHATSAPP_WEBHOOK_TOKEN:
+            return HttpResponse(challenge, status=200)
+        else:
+            return HttpResponse("error", status=403)
+

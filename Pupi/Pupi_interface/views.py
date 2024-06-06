@@ -1,5 +1,7 @@
+import json
 import os
 import re
+import time
 
 import requests
 from django.conf import settings
@@ -9,6 +11,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views import generic
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from Pupi_interface.api_calls.dollar_value import DollarValue
 from Pupi_interface.business import Result, Cliente
@@ -281,12 +284,53 @@ class GetUnitsWithLocalizationArguments(View):
         city = re.search("(?<=Localidad=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
         return country, province, city, _zip
 
+class MessageManager:
+    def __init__(self):
+        self.id_message = None
+        self.id_webhook = None
+        self.id_wa_error = None
 
-class VerificarPhone(View):
+    def set_id_webhook(self, id):
+            self.id_webhook = id
+
+    def set_id_wa(self, id):
+            self.id_message = id
+
+    def set_id_wa_error(self, id):
+        self.id_wa_error = str(id)
+
+
+    def compare_id_message(self):
+        telefono = self.request.session.get('telefono')
+        telefono_normalizado = self.request.session.get('telefono_normalizado')
+        resultado = self.request.session.get('resultado')
+        resultado_webhook = self.request.session.get('resultado_webhook')
+
+        if  1==1: #telefono and telefono_normalizado and resultado and resultado_webhook:
+            return {
+                'telefono': telefono,
+                'telefono_normalizado': telefono_normalizado,
+                'resultado': message_manager.id_message,
+                'resultado_webhook': message_manager.id_webhook,
+            }
+        else:
+            return {
+                'message': 'No hay información disponible en la sesión'
+            }
+
+    def get_response(self):
+        comparison_result = self.compare_id_message()
+        return JsonResponse(comparison_result)
+
+
+global message_manager
+
+message_manager = MessageManager()
+
+class VerifyPhone(View):
 
     def get(self, request):
 
-        print(settings.TOKEN_API_PHONE_SUSPICIOUS)
         if not self._get_token(request):
             return JsonResponse(
                 {
@@ -303,22 +347,50 @@ class VerificarPhone(View):
 
         if phone:
             phone_info_response = self._get_info_about_phone(phone)
-            print(phone_info_response)
             if "error" in phone_info_response:
                 return JsonResponse(
                     {
-                        "message": "ERROR - Telefono invalido"
+                        'Teléfono normalizado': f'+549{phone}',
+                        'Teléfono activo': f'False',
+                        'Geolocalización': {
+                            'Localidad': f'null',
+                            'Provincia': f'null'
+                        },
+                        'Whatsapp Activo': f'False'
                     })
             else:
                 province, city, prefijo, isok = self._set_visitor_province_city_prefijo_and_isok_from_phone(phone_info_response)
+                phone_normalized = f'+549{phone}'
+                texto = 'hola'
+                result = self.enviar_mensaje_a_whatsapp(phoneNormalized, texto)
+                wa_id = result['messages'][0]['id']
+                request.session['telefono'] = phone
+                request.session['telefono_normalizado'] = phone_normalized
+                request.session['resultado'] = wa_id
+                message_manager.set_id_wa(wa_id)
+
+                while message_manager.id_webhook != message_manager.id_message:
+                    time.sleep(0.01)
+
+                if message_manager.id_wa_error == settings.ID_SIN_WHATSAPP:
+                    wa_estado = "False"
+                elif message_manager.id_wa_error == settings.ID_CON_WHATSAPP:
+                    wa_estado = "True"
+                else:
+                    wa_estado = "Error no identificado"
+
                 return JsonResponse(
                     {
-                        'teléfono': f'{phone}',
-                        'Provincia': f'{province}',
-                        'Ciudad': f'{city}',
-                        'Prefijo': f'{prefijo}',
-                        'telefono normalizado': f'+549{phone}'
-                    })
+                        'Teléfono normalizado': f'{phone_normalized}',
+                        'Teléfono activo': f'{isok}',
+                        'Geolocalización':{
+                            'Localidad': f'{city}',
+                            'Provincia': f'{province}'
+                        },
+                        'Whatsapp Activo': f'{wa_estado}'
+                    }
+                )
+
 
     def _get_token(self, request):
         return request.GET.get("token") == settings.TOKEN_API_PHONE_SUSPICIOUS
@@ -346,23 +418,51 @@ class VerificarPhone(View):
         isok = re.search("(?<=IsOk=\")(\w+|(\w+\W\w+)+)(?=\")", phone_info_response).group(0)
         return province, city, prefijo, isok
 
+    def enviar_mensaje_a_whatsapp(self, telefono, texto):
+        data_to_send = {
+            "messaging_product": "whatsapp",
+            "recipient_type": "individual",
+            "to": f"{telefono}",
+            "type": "text",
+            "text": {
+                "preview_url": False,
+                "body": f"{texto}"
+            }
+        }
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {settings.WHATSAPP_API_TOKEN}',
+        }
+        try:
+            response = requests.post(f"https://{settings.WHATSAPP_API_URL}" + f"{settings.WHATSAPP_EMISOR_ID}/messages", json=data_to_send, headers=headers)
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Ocurrió un error: {e}")
 
+
+@method_decorator(csrf_exempt, name='dispatch')
 class WebhookWhatsapp(View):
 
-    @csrf_exempt
-    def webhookWhatsapp(request):
-        if request.method == 'POST':
-            def post(self, request, *args, **kwargs):
-                whatsapp_evento = request.data
-                return HttpResponse(status=200)
-        return HttpResponse(status=405)
+    def post(self, request, *args, **kwargs):
+        #whatsapp_evento = request.body
+        whatsapp_evento_str = request.body.decode('utf-8')
+        whatsapp_evento_dict = json.loads(whatsapp_evento_str)
+        wa_id_wh = whatsapp_evento_dict['entry'][0]['changes'][0]['value']['statuses'][0]['id']
+        wa_id_error_wh = whatsapp_evento_dict['entry'][0]['changes'][0]['value']['statuses'][0]['errors'][0]['code']
+        message_manager.id_webhook = wa_id_wh
+        message_manager.set_id_wa_error(wa_id_error_wh)
+        return HttpResponse(status=200)
+
     def get(self, request, *args, **kwargs):
-        mode = request.GET['hub.mode']
-        token = request.GET['hub.verify_token']
-        challenge = request.GET['hub.challenge']
+        mode = request.GET.get('hub.mode', '')
+        token = request.GET.get('hub.verify_token', '')
+        challenge = request.GET.get('hub.challenge', '')
 
         if mode == 'subscribe' and token == settings.WHATSAPP_WEBHOOK_TOKEN:
             return HttpResponse(challenge, status=200)
         else:
             return HttpResponse("error", status=403)
+
+
+
 

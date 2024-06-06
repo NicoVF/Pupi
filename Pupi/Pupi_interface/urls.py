@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import SendCatalogView, ConvertCSVView, NormalizeAndSortCSVView, GetUnitsWithLocalizationArguments, \
-    VerificarPhone, WebhookWhatsapp
+    VerifyPhone, WebhookWhatsapp
 
 app_name = 'polls'
 urlpatterns = [
@@ -10,7 +10,7 @@ urlpatterns = [
     path('catalog/send', SendCatalogView.as_view(), name='SendCatalog'),
     path('catalog/getUnitsWithLocalizationArguments', GetUnitsWithLocalizationArguments.as_view(),
          name="getUnitsWithLocalizationArguments"),
-    path('verificador/verificarTelefono', VerificarPhone.as_view(), name='VerificarPhone'),
+    path('verificador/verificarTelefono', VerifyPhone.as_view(), name='VerifyPhone'),
     path('verificador/webhookWhatsapp', WebhookWhatsapp.as_view(), name='WebhookWhatsapp')
 
 ]
